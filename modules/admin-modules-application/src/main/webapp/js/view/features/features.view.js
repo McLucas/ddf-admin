@@ -19,8 +19,8 @@ define([
         'jquery',
         '/applications/js/view/features/FeatureRow.view.js',
         'text!featureTemplate',
-        'datatables',
-        'icanhaz'
+        'icanhaz',
+        'datatables'
 ],
     function(Marionette, _, $, FeatureRowView, FeaturesTemplate, ich){
         'use strict';
