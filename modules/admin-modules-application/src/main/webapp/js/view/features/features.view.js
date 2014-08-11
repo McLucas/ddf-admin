@@ -17,7 +17,7 @@ define([
         'marionette',
         'underscore',
         'jquery',
-        '/applications/js/view/features/FeatureRow.view',
+        '/applications/js/view/features/FeatureRow.view.js',
         'text!featureTemplate',
         'datatables',
         'icanhaz'
