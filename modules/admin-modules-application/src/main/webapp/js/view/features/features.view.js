@@ -42,11 +42,6 @@ define([
 
             initialize: function (options) {
                 _.bindAll(this, 'onCompositeCollectionRendered', 'onShowFilter', 'onShowSort', 'onSort', 'onFilter');
-
-                // If a selected model is passed in as an option, cache it for use on render.
-                if (options.selectedModel) {
-                    this.selectedModel = options.selectedModel;
-                }
             },
 
             onRender: function () {

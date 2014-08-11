@@ -31,6 +31,10 @@ define([
 
             ], function(ApplicationView, ApplicationModel, FeaturesView, FeatureModel) {
             var appPage = new ApplicationView({modelClass: ApplicationModel, enableApplicationRemoval: true});
+            var featureView = new FeaturesView();
+            //var testCollection = new FeatureModel.Collection();
+            //var featuresJson = testCollection.fetch();
+            //$('body').append(featureView.render().$el);
 
             // Define a controller to run this module
             // --------------------------------------
@@ -43,9 +47,11 @@ define([
 
                 show: function(){
                     this.region.show(appPage);
+                    //this.region.show(featureView);
                 }
 
             });
+
 
             // Initialize this module when the app starts
             // ------------------------------------------
