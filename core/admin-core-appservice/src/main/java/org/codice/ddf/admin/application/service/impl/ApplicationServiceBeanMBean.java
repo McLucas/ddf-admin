@@ -79,5 +79,12 @@ public interface ApplicationServiceBeanMBean {
      * @return installation profile objects.
      */
     List<Map<String, Object>> getInstallationProfiles();
+    
+    /**
+     * TODO:
+     * @param applicationID
+     * @return
+     */
+    List<Map<String, Object>> getServices(String applicationID);
 
 }

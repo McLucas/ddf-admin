@@ -21,6 +21,8 @@
     </bean>
 
     <service ref="appService" interface="org.codice.ddf.admin.application.service.ApplicationService" />
+    
+        <reference id="configurationAdmin" interface="org.osgi.service.cm.ConfigurationAdmin" />
 
     <reference id="featuresService" interface="org.apache.karaf.features.FeaturesService" />
 
@@ -74,6 +76,12 @@
           init-method="init"
           destroy-method="destroy">
         <argument ref="appService" />
+        <argument ref="configurationAdminExt"></argument>
+    </bean>
+    
+    <bean id="configurationAdminExt" class="org.codice.ddf.ui.admin.api.ConfigurationAdminExt">
+    	<argument ref="blueprintBundleContext"></argument>
+    	<argument ref="configurationAdmin"></argument>
     </bean>
 
     <jaxrs:server id="restService" address="/application">

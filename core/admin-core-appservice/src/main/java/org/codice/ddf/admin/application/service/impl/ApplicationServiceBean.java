@@ -19,21 +19,26 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.Feature;
 import org.codice.ddf.admin.application.service.Application;
 import org.codice.ddf.admin.application.service.ApplicationNode;
 import org.codice.ddf.admin.application.service.ApplicationService;
 import org.codice.ddf.admin.application.service.ApplicationServiceException;
+import org.codice.ddf.ui.admin.api.ConfigurationAdminExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +80,12 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
     private static final String MAP_PARENTS = "parents";
 
     private Logger logger = LoggerFactory.getLogger(ApplicationServiceBeanMBean.class);
+    
+    private final ConfigurationAdminExt configAdminExt;
+    
+    private static final String SERVICE_PID = "service.pid";
+
+    private static final String SERVICE_FACTORYPID = "service.factoryPid";
 
     /**
      * Creates an instance of an ApplicationServiceBean
@@ -85,8 +96,9 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
      *             If an error occurs when trying to construct the MBean
      *             objects.
      */
-    public ApplicationServiceBean(ApplicationService appService) throws ApplicationServiceException {
+    public ApplicationServiceBean(ApplicationService appService, ConfigurationAdminExt configAdminExt) throws ApplicationServiceException {
         this.appService = appService;
+        this.configAdminExt = configAdminExt;
         try {
             objectName = new ObjectName(ApplicationService.class.getName()
                     + ":service=application-service");
@@ -318,6 +330,94 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
                         applicationURL, ase);
             }
         }
+    }
+
+    /** {@inheritDoc}.*/
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> getServices(String applicationID) {
+		List<Map<String, Object>> services = configAdminExt.listServices(getDefaultFactoryLdapFilter(), getDefaultLdapFilter());
+		List<Map<String, Object>> returnValues = new ArrayList<Map<String, Object>>();
+		
+		if (!services.isEmpty()) {
+			Application app = appService.getApplication(applicationID);
+
+			if (app != null) {
+				try {
+					Set<BundleInfo> bundles = app.getBundles();
+
+					Set<String> bundleLocations = new HashSet<String>();
+					for (BundleInfo info : bundles) {
+						bundleLocations.add(info.getLocation());
+					}
+
+					for (Map<String, Object> service : services) {
+						if (service.containsKey("configurations")) {
+							List<Map<String, Object>> configurations = (List<Map<String, Object>>) service.get("configurations");
+							for (Map<String, Object> item : configurations) {
+								if (item.containsKey("bundle_location")) {
+									String bundleLocation = (String) item.get("bundle_location");
+									if (bundleLocations.contains(bundleLocation)) {
+										returnValues.add(service);
+									}
+								}
+							}
+						}
+					}
+
+				} catch (ApplicationServiceException e) {
+					logger.error("There was an error while trying to access the application", e);
+					return new ArrayList<Map<String, Object>>();
+				}
+			}
+		}
+
+		return returnValues;
+	}
+	
+    private String getDefaultFactoryLdapFilter() {
+        List<String> filterList = new ArrayList<String>();
+        if (CollectionUtils.isNotEmpty(filterList)) {
+            StringBuilder ldapFilter = new StringBuilder();
+            ldapFilter.append("(");
+            ldapFilter.append("|");
+
+            for (String fpid : filterList) {
+                ldapFilter.append("(");
+                ldapFilter.append(SERVICE_FACTORYPID);
+                ldapFilter.append("=");
+                ldapFilter.append(fpid);
+                ldapFilter.append(")");
+            }
+
+            ldapFilter.append(")");
+
+            return ldapFilter.toString();
+        }
+        return "(" + SERVICE_FACTORYPID + "=" + "*)";
+    }
+
+    private String getDefaultLdapFilter() {
+    	List<String> filterList = new ArrayList<String>();
+        if (CollectionUtils.isNotEmpty(filterList)) {
+            StringBuilder ldapFilter = new StringBuilder();
+            ldapFilter.append("(");
+            ldapFilter.append("|");
+
+            for (String fpid : filterList) {
+                ldapFilter.append("(");
+                ldapFilter.append(SERVICE_PID);
+                ldapFilter.append("=");
+                ldapFilter.append(fpid);
+                ldapFilter.append("*");
+                ldapFilter.append(")");
+            }
+
+            ldapFilter.append(")");
+
+            return ldapFilter.toString();
+        }
+        return "(" + SERVICE_PID + "=" + "*)";
     }
 
 }
