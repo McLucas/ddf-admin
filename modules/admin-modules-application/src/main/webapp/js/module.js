@@ -26,39 +26,42 @@ define([
         require([
                 '/applications/js/view/ApplicationGrid.view.js',
                 '/applications/js/model/ApplicationsLayout.js',
-               '/applications/js/view/features/Features.view.js',
-               '/applications/js/model/features/Feature.js'
+                'applications/js/controllers/FeatureController.js'
 
-            ], function(ApplicationView, ApplicationModel, FeaturesView, FeatureModel) {
-            var appPage = new ApplicationView({modelClass: ApplicationModel, enableApplicationRemoval: true});
-            var featureView = new FeaturesView();
-            //var testCollection = new FeatureModel.Collection();
-            //var featuresJson = testCollection.fetch();
-            //$('body').append(featureView.render().$el);
+            ], function(ApplicationView, ApplicationModel, FeatureController) {
+            var appPage = new ApplicationView({modelClass: ApplicationModel, enableApplicationRemoval: true}),
 
             // Define a controller to run this module
             // --------------------------------------
-
-            var Controller = Marionette.Controller.extend({
+            Controller = Marionette.Controller.extend({
 
                 initialize: function(options){
                     this.region = options.region;
+                    this.featuresController = options.featuresController;
                 },
 
                 show: function(){
                     this.region.show(appPage);
-                    //this.region.show(featureView);
+                },
+
+                features: function() {
+                    return this.featuresController.showAll();
+                },
+
+                featuresByApp: function(appName) {
+                    return this.featuresController.show(appName);
                 }
 
             });
 
-
             // Initialize this module when the app starts
             // ------------------------------------------
-
             ApplicationModule.addInitializer(function(){
                 ApplicationModule.contentController = new Controller({
-                    region: App.applications
+                    region: App.applications,
+                    featuresController:  new FeatureController({
+                        region: App.features
+                    })
                 });
                 ApplicationModule.contentController.show();
             });

@@ -26,7 +26,7 @@ define([
         }
 
         var FeatureRow = Marionette.ItemView.extend({
-            template: FeatureRowTemplate,
+            template: 'featureRowTemplate',
             tagName: 'tr',
 
             initialize: function(){

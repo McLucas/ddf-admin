@@ -30,7 +30,7 @@ define([
         }
 
         var FeaturesView = Marionette.CompositeView.extend({
-            template: FeaturesTemplate,
+            template: 'featureTemplate',
             itemViewContainer: 'tbody',
             itemView: FeatureRowView,
 
@@ -41,17 +41,18 @@ define([
             },
 
             initialize: function (options) {
+                this.collection = options.collection;
                 _.bindAll(this, 'onCompositeCollectionRendered', 'onShowFilter', 'onShowSort', 'onSort', 'onFilter');
             },
 
             onRender: function () {
-                /*
+
                 // remove any listeners that may or may not yet exist
                 this.$('#filter-features').off('keyup', this.onFilter);
 
                 // Begin listening to the filter input
                 this.$('#filter-features').on('keyup', this.onFilter);
-
+                /*
                 // Check to see if we need to select a specific row in the table
                 if (!(_.isUndefined(this.selectedModel))) {
                     var selectedView = this.children.findByModel(this.selectedModel);

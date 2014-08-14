@@ -13,27 +13,34 @@
 *
 **/
 /*global define*/
-define(['backbone','underscore'], function (Backbone,_) {
+//define(['backbone','underscore'], function (Backbone,_) {
+define(['backbone'], function (Backbone) {
 
     var Feature = {};
-    var featureUrl = '/jolokia/read/org.apache.karaf:type=features,name=root';
+
+    var featureUrl = '/jolokia/read/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/AllFeatures';
+    var featureByAppUrl = '/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/findApplicationFeatures/';
 
     Feature.Model = Backbone.Model.extend({
         urlRoot: function(){
             return featureUrl;
-        },
-        toJSON: function(){
-            var modelJSON = _.clone(this.attributes);
-            return _.extend(modelJSON,{
-                displayName: modelJSON.name.replace('profile-','')
-            });
         }
+
     });
 
     Feature.Collection = Backbone.Collection.extend({
         model: Feature.Model,
+        initialize: function(options){
+            this.type = options.type;
+            this.appName = options.appName;
+        },
         url: function() {
-            return featureUrl;
+            if(this.type !== 'all'){
+                return featureByAppUrl + this.appName;
+            }else{
+                return featureUrl;
+            }
+
         },
         parse: function(resp){
             return resp.value;
