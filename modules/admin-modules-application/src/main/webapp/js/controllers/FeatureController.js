@@ -25,10 +25,12 @@ define([
 
             initialize: function(options){
                 this.region = options.region;
+                this.foo = 'foo';
             },
 
             show: function(appName){
-                var view = this;
+                var self = this;
+                self.appName = appName;
                 var features = new FeatureModel.Collection({
                     type: 'app',
                     appName: appName
@@ -38,7 +40,9 @@ define([
                         var featureView = new FeaturesView({
                             collection: collection
                         });
-                        view.region.show(featureView);
+                        self.region.show(featureView);
+                        //featureView.on("itemview:selected", self.onFeatureAction);
+                        self.listenTo(featureView,"itemview:selected", self.onFeatureAction);
                     }
                 });
             },
@@ -56,7 +60,38 @@ define([
                         view.region.show(featureView);
                     }
                 });
+            },
+
+            onFeatureAction: function (view, model){
+                var self = this;
+                var status = model.get("status");
+                var featureModel = new FeatureModel.Model({
+                    name: model.get("name")
+                });
+                //TODO: add loading div...
+                if(status === "Uninstalled") {
+                    var install = featureModel.install();
+                    if(install){
+                        install.success(function() {
+                            self.show(self.appName);
+                            console.log("installed " + featureModel.name +" app = " + self.appName);
+                        }).fail(function() {
+                            console.log("install failed for " + featureModel.name +" app = " + self.appName);
+                        });
+                    }
+                }else{
+                    var uninstall = featureModel.uninstall();
+                    if(uninstall){
+                        uninstall.success(function() {
+                            self.show(self.appName);
+                            console.log("uninstalled " + featureModel.name +" app = " + self.appName);
+                        }).fail(function() {
+                            console.log("uninstall failed for " + featureModel.name +" app = " + self.appName);
+                        });
+                    }
+                }
             }
+
 
         });
 

@@ -46,28 +46,25 @@ define([
             },
 
             onRender: function () {
-
                 // remove any listeners that may or may not yet exist
                 this.$('#filter-features').off('keyup', this.onFilter);
 
                 // Begin listening to the filter input
                 this.$('#filter-features').on('keyup', this.onFilter);
-                /*
-                // Check to see if we need to select a specific row in the table
-                if (!(_.isUndefined(this.selectedModel))) {
-                    var selectedView = this.children.findByModel(this.selectedModel);
-                    if (selectedView) {
-                        selectedView.trigger('selected', selectedView.model);
-                    }
-
-                    // Reset the selectedModel attribute so future renders do not utilize it un-expectedly
-                    this.selectedModel = undefined;
-                }
-                */
             },
 
             onCompositeCollectionRendered: function () {
                 this.$('#features-table').dataTable({
+                    columnDefs : [{render : function(data,type,row){
+                        var src = "/applications/images/bundle_start.png";
+                        var title = "Install";
+                        if(row[3] === 'Installed'){
+                           src = "/applications/images/bundle_delete.png";
+                           title = "Uninstall";
+                        }
+                        var image = '<img id="action" src="' + src + '" title="' + title + '"' +" />";
+                        return image;
+                    },"targets" : 4}],
                     bLengthChange: false,
                     bSortClasses: false,
                     sDom: 't<"table-footer"ip>',
