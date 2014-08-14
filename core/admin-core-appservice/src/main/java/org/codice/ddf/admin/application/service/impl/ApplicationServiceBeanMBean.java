@@ -79,5 +79,12 @@ public interface ApplicationServiceBeanMBean {
      * @return installation profile objects.
      */
     List<Map<String, Object>> getInstallationProfiles();
-
+    
+    /**
+     * Returns the the json for the plugins based on the app name.
+     * @param appName - what we want the plugins for.
+     * @return a mapping that will be converted to json.
+     */
+    List<Map<String, Object>> getConfigurationPlugins(String appName);
+    
 }
