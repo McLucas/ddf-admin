@@ -35,7 +35,7 @@ define([
         },
         initialize: function(options){
             this.model = options.model;
-            this.appKey = this.model.get('name') + "-" + this.model.get('version')
+            this.appKey = this.model.get('name') + "-" + this.model.get('version');
             console.log("Current Application: " + this.appKey);
         },
         events: {
@@ -49,7 +49,7 @@ define([
             e.preventDefault();
             App.vent.trigger('navigateTo:applicationHome');
         },
-        getFeatures: function(e){
+        getFeatures: function(){
             var featureController = new FeatureController({
                 region: this.features
             });

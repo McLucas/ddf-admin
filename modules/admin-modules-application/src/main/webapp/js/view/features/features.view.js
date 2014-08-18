@@ -65,16 +65,11 @@ define([
                         var image = '<img id="action" src="' + src + '" title="' + title + '"' +" />";
                         return image;
                     },"targets" : 4}],
+                    pagingType: 'full_numbers',
                     bLengthChange: false,
                     bSortClasses: false,
                     sDom: 't<"table-footer"ip>',
                     oLanguage: {
-                        oPaginate: {
-                            sFirst: '',
-                            sLast: '',
-                            sNext: '',
-                            sPrevious: ''
-                        },
                         sSearch: 'Filter:',
                         sInfo: '_START_ - _END_ of _TOTAL_'
                     },
