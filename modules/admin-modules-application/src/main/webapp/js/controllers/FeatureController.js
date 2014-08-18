@@ -74,9 +74,9 @@ define([
                     if(install){
                         install.success(function() {
                             self.show(self.appName);
-                            console.log("installed " + featureModel.name +" app = " + self.appName);
+                            console.log("installed feature: " + featureModel.name +" app: " + self.appName);
                         }).fail(function() {
-                            console.log("install failed for " + featureModel.name +" app = " + self.appName);
+                            console.log("install failed for feature: " + featureModel.name +" app: " + self.appName);
                         });
                     }
                 }else{
@@ -84,9 +84,9 @@ define([
                     if(uninstall){
                         uninstall.success(function() {
                             self.show(self.appName);
-                            console.log("uninstalled " + featureModel.name +" app = " + self.appName);
+                            console.log("uninstalled feature: " + featureModel.name +" app: " + self.appName);
                         }).fail(function() {
-                            console.log("uninstall failed for " + featureModel.name +" app = " + self.appName);
+                            console.log("uninstall failed for feature: " + featureModel.name +" app: " + self.appName);
                         });
                     }
                 }

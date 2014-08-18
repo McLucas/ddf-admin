@@ -63,8 +63,7 @@ define([
                         region: App.features
                     })
                 });
-                //ApplicationModule.contentController.show();
-                ApplicationModule.contentController.featuresByApp('spatial-app-2.4.2');
+                ApplicationModule.contentController.show();
             });
         });
     });
