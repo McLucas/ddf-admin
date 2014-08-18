@@ -30,6 +30,7 @@ import javax.management.ObjectName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.features.Feature;
+import org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin;
 import org.codice.ddf.admin.application.service.Application;
 import org.codice.ddf.admin.application.service.ApplicationNode;
 import org.codice.ddf.admin.application.service.ApplicationService;
@@ -75,6 +76,9 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
     private static final String MAP_PARENTS = "parents";
 
     private Logger logger = LoggerFactory.getLogger(ApplicationServiceBeanMBean.class);
+    
+    /** has all the application configuration plugins.*/
+    private List<ApplicationConfigurationPlugin> pluginList;
 
     /**
      * Creates an instance of an ApplicationServiceBean
@@ -319,5 +323,36 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
             }
         }
     }
+
+    /** {@inheritDoc}.*/
+	@Override
+	public List<Map<String, Object>> getConfigurationPlugins(String appName) {
+		List<Map<String, Object>> returnValues = new ArrayList<Map<String, Object>>();
+
+		for (ApplicationConfigurationPlugin plugin : pluginList) {
+			if (plugin.matchesApplicationName(appName)) {
+				returnValues.add(plugin.toJSON());
+			}
+		}
+		
+		return returnValues;
+	}
+	
+	/**
+	 * Getter method for the plugin list.
+	 * @return the plugin list.
+	 */
+	public List<ApplicationConfigurationPlugin> getPluginList() {
+		return pluginList;
+	}
+
+	/**
+	 * Setter method for the plugin list.
+	 * @param pluginList the plugin list.
+	 */
+	public void setPluginList(List<ApplicationConfigurationPlugin> pluginList) {
+		this.pluginList = pluginList;
+	}
+
 
 }

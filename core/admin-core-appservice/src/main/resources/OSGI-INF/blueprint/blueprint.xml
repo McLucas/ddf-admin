@@ -74,6 +74,7 @@
           init-method="init"
           destroy-method="destroy">
         <argument ref="appService" />
+        <property name="pluginList" ref="pluginList" />
     </bean>
 
     <jaxrs:server id="restService" address="/application">
@@ -95,5 +96,15 @@
     <bean id="notActiveApplicationsCompleter" class="org.codice.ddf.admin.application.service.impl.NotActiveApplicationsCompleter">
       <argument ref="appService" />
     </bean>
+    
+	<reference-list id="pluginList" interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin" availability="optional" />
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.ConfigurationPlugin"></bean>
+	</service>
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.FeaturesPlugin"></bean>
+	</service>
 
 </blueprint>
