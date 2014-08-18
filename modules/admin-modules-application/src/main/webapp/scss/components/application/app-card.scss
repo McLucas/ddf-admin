@@ -5,7 +5,7 @@
   position: relative;
 
   .panel-body {
-    padding: 0px; // reset bootstrap
+    padding: 0px $app-card-overlay-width 0px 0px; // reset bootstrap
     height: 100%;
   }
 
@@ -27,24 +27,14 @@
     left: 5px;
   }
 
-  .card-overlay.right {
+  .card-overlay {
     right: 0;
     top:0;
     bottom:0;
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
-    width: 60px;
+    width: $app-card-overlay-width;
 
-  }
-  .card-overlay.bottom {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    width: auto;
-  }
-
-  .card-overlay {
     position: absolute;
     visibility: hidden;
     background-color:white;
@@ -62,14 +52,15 @@
     }
 
     .divider {
-      margin: 5px 0px;
+      margin: 30px 0px;
+      display: block;
     }
   }
 
   &:hover {
     background-color: $bs-btn-well-default-background-color;
     transition: background-color 400ms ease, opacity 400ms ease;
-    .card-overlay.right {
+    .card-overlay.select-button-group {
       visibility: visible;
       opacity: 1;
       background-color: $bs-btn-primary-backbround-color;
@@ -83,6 +74,10 @@
     text-align: center;
     i {
       font-size: 50px;
+    }
+
+    .panel-body {
+      padding: 0px; // reset bootstrap
     }
   }
 }
@@ -102,8 +97,6 @@
 /////
 // list variant
 ////
-
-
 .apps-grid[list-type="list"] {
 
   .app-card {
@@ -115,14 +108,6 @@
       border-radius: 0px;
     }
 
-    .card-overlay.bottom {
-      right: 0;
-      top:0;
-      bottom:0;
-      left: auto;
-      width: 80px;
-    }
-
     &.panel {
       margin-bottom: 0px;
     }
@@ -130,6 +115,14 @@
 
   .list-hidden {
     display: none;
+  }
+
+  .card-overlay.action-button-group {
+    width: 160px;
+    .divider {
+      display: inline-block;
+      margin: 0px 10px;
+    }
   }
 
   .name-version-container {
@@ -158,6 +151,17 @@
   }
 }
 
-.not-installed .apps-grid[list-type="list"] .grid-cell:first-child .app-card {
+.installed .apps-grid[list-type="list"] .app-card.new-or-update-app {
   border-top-width: 1px;
 }
+.installed .apps-grid[list-type="list"] .grid-cell:nth-child(2) .app-card {
+  border-top-width: 1px;
+}
+.not-installed .apps-grid[list-type="list"] .grid-cell:nth-child(1) .app-card {
+  border-top-width: 1px;
+}
+
+.edit-mode .installed .apps-grid[list-type="list"] .grid-cell:nth-child(2) .app-card {
+  border-top-width: 0px;
+}
+
