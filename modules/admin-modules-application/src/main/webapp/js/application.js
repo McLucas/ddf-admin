@@ -32,8 +32,7 @@ define([
 
     //add regions
     Application.App.addRegions({
-        applications: '#applications',
-        features: '#features'
+        applications: '#applications'
     });
 
     //configure the router (we aren't using this yet)

@@ -25,7 +25,24 @@ define([
 
             initialize: function(options){
                 this.region = options.region;
-                this.foo = 'foo';
+            },
+
+            getFeatures: function(appName){
+                var self = this;
+                self.appName = appName;
+                var features = new FeatureModel.Collection({
+                    type: 'app',
+                    appName: appName
+                });
+                features.fetch({
+                    success: function(collection) {
+                        var featureView = new FeaturesView({
+                            collection: collection
+                        });
+                        self.region.show(featureView);
+                        self.listenTo(featureView,"itemview:selected", self.onFeatureAction);
+                    }
+                });
             },
 
             show: function(appName){
@@ -41,7 +58,7 @@ define([
                             collection: collection
                         });
                         self.region.show(featureView);
-                        //featureView.on("itemview:selected", self.onFeatureAction);
+                        //self.layout.featuresDetails.show(featureView);
                         self.listenTo(featureView,"itemview:selected", self.onFeatureAction);
                     }
                 });
