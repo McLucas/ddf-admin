@@ -87,4 +87,15 @@ public interface ApplicationServiceBeanMBean {
      */
     List<Map<String, Object>> getConfigurationPlugins(String appName);
     
+    /**
+     * Returns all Features in DDF
+     * @return
+     */
+    List<Map<String, Object>> getAllFeatures();
+    /**
+     * Returns all Features in DDF by Application
+     * @return
+     */
+    List<Map<String, Object>> findApplicationFeatures(String applicationName);
+
 }
