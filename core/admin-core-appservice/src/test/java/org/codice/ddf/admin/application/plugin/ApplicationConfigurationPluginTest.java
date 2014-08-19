@@ -78,7 +78,7 @@ public class ApplicationConfigurationPluginTest {
 		
 		Map<String, Object> constructedJSON = new HashMap<String, Object>();
 		constructedJSON.put(ApplicationConfigurationPlugin.DISPLAY_NAME_KEY, plugin.getDisplayName());
-		constructedJSON.put(ApplicationConfigurationPlugin.ID_KEY, plugin.getID());
+		constructedJSON.put(ApplicationConfigurationPlugin.ID_KEY, plugin.getID().toString());
 		constructedJSON.put(ApplicationConfigurationPlugin.IFRAME_LOCATION_KEY, plugin.getIframeLocation().toString());
 		constructedJSON.put(ApplicationConfigurationPlugin.JAVASCRIPT_LOCATION_KEY, plugin.getJavascriptLocation());
 		constructedJSON.put(ApplicationConfigurationPlugin.APPLICATION_ASSOCIATION_KEY, plugin.getAssociatedApplications());

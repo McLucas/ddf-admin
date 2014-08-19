@@ -81,7 +81,7 @@ public class AbstractApplicationConfigurationPlugin implements ApplicationConfig
 		Map<String, Object> jsonMapping = new HashMap<String, Object>();
 		
 		jsonMapping.put(ApplicationConfigurationPlugin.APPLICATION_ASSOCIATION_KEY, this.applicationNames);
-		jsonMapping.put(ApplicationConfigurationPlugin.ID_KEY, this.id);
+		jsonMapping.put(ApplicationConfigurationPlugin.ID_KEY, this.id.toString());
 		jsonMapping.put(ApplicationConfigurationPlugin.DISPLAY_NAME_KEY, this.displayName);
 		jsonMapping.put(ApplicationConfigurationPlugin.IFRAME_LOCATION_KEY, this.iframeLocation);
 		jsonMapping.put(ApplicationConfigurationPlugin.JAVASCRIPT_LOCATION_KEY, this.javascriptLocation);
