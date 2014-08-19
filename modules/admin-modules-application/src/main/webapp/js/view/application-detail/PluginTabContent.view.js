@@ -14,13 +14,14 @@
  **/
 /* global define */
 define([
+    'require',
     'marionette',
     'backbone',
     'icanhaz',
     '/applications/js/view/IFrameView.js',
     'text!pluginTabContentItemView',
     'text!pluginTabContentCollectionView'
-    ],function (Marionette, Backbone, ich, IFrameView, pluginTabContentItemView, pluginTabContentCollectionView) {
+    ],function (require, Marionette, Backbone, ich, IFrameView, pluginTabContentItemView, pluginTabContentCollectionView) {
 
     ich.addTemplate('pluginTabContentItemView', pluginTabContentItemView);
     ich.addTemplate('pluginTabContentCollectionView', pluginTabContentCollectionView);
@@ -36,9 +37,8 @@ define([
         },
         onRender: function(){
             var view = this;
-            view.model.set('jsLocation','/applications/js/view/plugins/config/Plugin.view.js');
             var iframeLocation = view.model.get('iframeLocation');
-            var jsLocation = view.model.get('jsLocation');
+            var jsLocation = view.model.get('javascriptLocation');
             if(jsLocation){
                 require([jsLocation], function(TabView){
                     var newView = new TabView({model: view.model});

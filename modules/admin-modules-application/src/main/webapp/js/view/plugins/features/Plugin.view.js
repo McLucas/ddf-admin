@@ -16,7 +16,7 @@
 define([
     'marionette',
     'icanhaz',
-    'text!/applications/templates/plugins/feature/pluginView.handlebars'
+    'text!/applications/templates/plugins/features/pluginView.handlebars'
 ], function (Marionette, ich, featurePluginView) {
 
     ich.addTemplate('featurePluginView',featurePluginView);
