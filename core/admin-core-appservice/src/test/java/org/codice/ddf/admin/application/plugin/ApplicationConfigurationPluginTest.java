@@ -44,6 +44,8 @@ public class ApplicationConfigurationPluginTest {
 	/** static for the assocations test.*/
 	private static final List<String> ORIGINAL_APP_ASSOCIATIONS = new LinkedList<String>(Arrays.asList(TEST_ASSOCATION_1, TEST_ASSOCATION_2));
 	
+	private static final Integer ORDER_TEST = 1337;
+	
 
 	/**
 	 * Test class we will utilize for the tests.
@@ -57,6 +59,7 @@ public class ApplicationConfigurationPluginTest {
 		public TestPlugin() {
 			this.displayName = DISPLAY_NAME_TEST;
 			this.iframeLocation = IFRAME_LOCATION_TEST;
+			this.order = ORDER_TEST;
 			setApplicationAssociations(ORIGINAL_APP_ASSOCIATIONS);
 		}
 		
@@ -75,6 +78,7 @@ public class ApplicationConfigurationPluginTest {
 		assertFalse(0 == plugin.getID().compareTo(plugin2.getID()));
 		assertEquals(plugin.getIframeLocation().toString(), IFRAME_LOCATION_TEST);
 		assertEquals(plugin.getAssociatedApplications(), ORIGINAL_APP_ASSOCIATIONS);
+		assertEquals(plugin.getOrder(), ORDER_TEST);
 		
 		Map<String, Object> constructedJSON = new HashMap<String, Object>();
 		constructedJSON.put(ApplicationConfigurationPlugin.DISPLAY_NAME_KEY, plugin.getDisplayName());
@@ -82,6 +86,7 @@ public class ApplicationConfigurationPluginTest {
 		constructedJSON.put(ApplicationConfigurationPlugin.IFRAME_LOCATION_KEY, plugin.getIframeLocation().toString());
 		constructedJSON.put(ApplicationConfigurationPlugin.JAVASCRIPT_LOCATION_KEY, plugin.getJavascriptLocation());
 		constructedJSON.put(ApplicationConfigurationPlugin.APPLICATION_ASSOCIATION_KEY, plugin.getAssociatedApplications());
+		constructedJSON.put(ApplicationConfigurationPlugin.ORDER_KEY, plugin.getOrder());
 		
 		//compare the maps.
 		Map<String, Object> pluginMap = plugin.toJSON();

@@ -27,6 +27,7 @@ public class ConfigurationPlugin extends AbstractApplicationConfigurationPlugin 
 	public ConfigurationPlugin() {
 		this.displayName = "Configuration";
 		this.iframeLocation = "";
+		this.order = 2;
 	}	
 
 }

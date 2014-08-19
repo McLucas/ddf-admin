@@ -15,18 +15,19 @@
 package org.codice.ddf.admin.application.plugin;
 
 /**
- * Features implementation of the ApplicationConfigurationPlugin.
+ * Defines a plugin for details.
  * @author Jeren
  *
  */
-public class FeaturesPlugin extends AbstractApplicationConfigurationPlugin {
+public class DetailsPlugin extends AbstractApplicationConfigurationPlugin {
 	
 	/**
 	 * Constructor.
 	 */
-	public FeaturesPlugin() {
-		this.displayName = "Features";
-		this.iframeLocation = "";
-		this.order = 1;
+	public DetailsPlugin() {
+		this.displayName = "Details";
+		this.javascriptLocation = "/somelocation/";
+		this.order = 0;
 	}
+
 }
