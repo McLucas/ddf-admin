@@ -32,7 +32,12 @@
             featureTemplate: '/applications/templates/features/features.handlebars',
             featureRowTemplate: '/applications/templates/features/featureRow.handlebars',
             addApplicationCard: '/applications/templates/addAppCard.handlebars',
-            applicationDetailLayout:'/applications/templates/application-detail/ApplicationDetail.layout.handlebars'
+            applicationDetailLayout:'/applications/templates/application-detail/ApplicationDetail.layout.handlebars',
+            pluginTabItemView:'/applications/templates/application-detail/PluginTab.item.view.handlebars',
+            pluginTabCollectionView:'/applications/templates/application-detail/PluginTab.collection.view.handlebars',
+            pluginTabContentItemView:'/applications/templates/application-detail/PluginTabContent.item.view.handlebars',
+            pluginTabContentCollectionView:'/applications/templates/application-detail/PluginTabContent.collection.view.handlebars',
+            iframeView:'/applications/templates/iframeView.handlebars'
         }
     });
 }());

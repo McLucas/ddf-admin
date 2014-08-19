@@ -15,22 +15,25 @@
 /* global define */
 define([
     'marionette',
-    'ich',
+    'icanhaz',
     'text!pluginTabItemView',
     'text!pluginTabCollectionView'
-    ],function (Marionette, pluginTabItemView, pluginTabCollectionView) {
+    ],function (Marionette, ich, pluginTabItemView, pluginTabCollectionView) {
 
     ich.addTemplate('pluginTabItemView',pluginTabItemView);
-    ich.addTemplate('pluginTabCollectionView',pluginTabCollectionView);
+    ich.addTemplate('pluginTabCollectionView', pluginTabCollectionView);
 
-    var ItemView = Marionette.CollectionView.extend({
+    var ItemView = Marionette.ItemView.extend({
         template: 'pluginTabItemView',
-        tagName: 'li'
+        tagName: 'li',
+        className: 'itemview'
     });
 
     var PluginTabView = Marionette.CompositeView.extend({
-        template: 'pluginTabCollectionView'
+        template: 'pluginTabCollectionView',
         itemView: ItemView,
+        className: '.plugin-view',
+        itemViewContainer: '.nav.nav-tabs'
     });
 
 

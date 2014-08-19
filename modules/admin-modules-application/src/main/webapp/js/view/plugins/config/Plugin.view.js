@@ -16,14 +16,14 @@
 define([
     'marionette',
     'icanhaz',
-    'text!iframeView'
-    ],function (Marionette, ich, iframeView) {
+    'text!/applications/templates/plugins/config/pluginView.handlebars'
+    ], function (Marionette, ich, configPluginViewTemplate) {
 
-    ich.addTemplate('iframeView',iframeView);
-
-    var IFrameView = Marionette.ItemView.extend({
-        template: 'iframeView',
-        className: 'iframe-view'
+    ich.addTemplate('configPluginViewTemplate',configPluginViewTemplate);
+    var PluginView = Marionette.ItemView.extend({
+        template: 'configPluginViewTemplate'
     });
-    return IFrameView;
+
+    return PluginView;
+
 });

@@ -14,24 +14,48 @@
  **/
 /* global define */
 define([
-    'marionette'
-    'ich',
+    'marionette',
+    'backbone',
+    'icanhaz',
+    '/applications/js/view/IFrameView.js',
     'text!pluginTabContentItemView',
     'text!pluginTabContentCollectionView'
-    ],function (Marionette, ich, pluginTabContentItemView, pluginTabContentCollectionView) {
+    ],function (Marionette, Backbone, ich, IFrameView, pluginTabContentItemView, pluginTabContentCollectionView) {
 
     ich.addTemplate('pluginTabContentItemView', pluginTabContentItemView);
     ich.addTemplate('pluginTabContentCollectionView', pluginTabContentCollectionView);
 
-    var ItemView = Marionette.CollectionView.extend({
-        template: 'pluginTabContentItemView'
+    var ItemView = Marionette.Layout.extend({
+        template: 'pluginTabContentItemView',
+        className: 'tab-pane fade',
+        regions: {
+            tabContentInner: '.tab-content-inner'
+        },
+        onBeforeRender: function(){
+            this.$el.attr('id', this.model.get('displayName'));
+        },
+        onRender: function(){
+            var view = this;
+            view.model.set('jsLocation','/applications/js/view/plugins/config/Plugin.view.js');
+            var iframeLocation = view.model.get('iframeLocation');
+            var jsLocation = view.model.get('jsLocation');
+            if(jsLocation){
+                require([jsLocation], function(TabView){
+                    var newView = new TabView({model: view.model});
+                    view.tabContentInner.show(newView);
+                });
+            } else if(iframeLocation){
+                view.tabContentInner.show(new IFrameView({
+                    model: new Backbone.Model({url : iframeLocation})
+                }));
+            }
+        }
     });
 
-    var PluginTabContentsView = Marionette.CompositeView.extend({
-        template: 'pluginTabContentCollectionView',
+    var PluginTabContentsView = Marionette.CollectionView.extend({
+        className: 'tab-content',
         itemView: ItemView
     });
-
 
     return PluginTabContentsView;
 });

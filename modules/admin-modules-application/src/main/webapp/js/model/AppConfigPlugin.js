@@ -12,6 +12,32 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  *
  **/
-define(function () {
-    return {};
+/*global define*/
+define([
+    'backbone',
+    'underscore'
+    ],function (Backbone, _) {
+
+
+    var AppConfigPlugin = {};
+
+    AppConfigPlugin.Model = Backbone.Model.extend({});
+
+    AppConfigPlugin.Collection = Backbone.Collection.extend({
+        url: 'jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getConfigurationPlugins(java.lang.String)/',
+        fetchByAppName: function(appName, options){
+            var collection = this;
+
+            var newOptions = _.extend({
+                url: collection.url + appName
+            }, options);
+            return this.fetch(newOptions);
+        },
+        parse: function(resp){
+            return resp.value;
+        }
+    });
+
+    return AppConfigPlugin;
+
 });

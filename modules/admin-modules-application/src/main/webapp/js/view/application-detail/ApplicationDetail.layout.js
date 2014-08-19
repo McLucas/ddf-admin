@@ -29,13 +29,12 @@ define([
     var DetailedApplicationLayout = Marionette.Layout.extend({
         template: 'applicationDetailLayout',
         regions: {
-            content: '.content'
+            content: '.content',
+            tabs: '.tab-container',
+            tabContent: '.tab-content-container'
         },
         events: {
             'click .nav-to-applications': 'navToApplications'
-        },
-        onRender: function(){
-            console.log(App.module('Applications'));  // use this object to get reference to module.controllers
         },
         navToApplications: function(e){
             e.preventDefault();
