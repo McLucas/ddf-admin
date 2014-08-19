@@ -15,7 +15,9 @@
 package org.codice.ddf.admin.application.plugin;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Defines an application configuration plugin. 
@@ -28,24 +30,40 @@ public interface ApplicationConfigurationPlugin {
 	/** key for the display name. Used for creating json.*/
 	public static final String DISPLAY_NAME_KEY = "displayName";
 	/** key for the application name. Used for creating json.*/
-	public static final String APPLICATION_NAME_KEY = "applicationName";
+	public static final String APPLICATION_ASSOCIATION_KEY = "applicationAssociation";
 	/** key for the iframe location. Used for creating json.*/
 	public static final String IFRAME_LOCATION_KEY = "iframeLocation";
+	/** key for the javascript location. Used for creating json.*/
+	public static final String JAVASCRIPT_LOCATION_KEY = "javascriptLocation";
+	/** key for the id location. Used for creating json.*/
+	public static final String ID_KEY = "id";
 	
 	/**
-	 * Returns the application name.
-	 * @return the application name.
+	 * Returns a list of applications that this plugin should be associated with.
+	 * @return a list of applications that this plugin should be associated with.
 	 */
-	public String getApplicationName();
+	public List<String> getAssociatedApplications();
 	
 	/**
-	 * Returns the display name.
+	 * Returns the display name. This is the value that will be display to the user.
 	 * @return the display name.
 	 */
 	public String getDisplayName();
 	
 	/**
-	 * Returns the iframe location.
+	 * Returns the id of this plugin. This is an unique identifier for the front end javascript.
+	 * @return a unique identifier for this plugin as a uuid.
+	 */
+	public UUID getID();
+	
+	/**
+	 * Returns the location of the javascript. Can be null.
+	 * @return the location of the javascript.
+	 */
+	public URI getJavascriptLocation();
+	
+	/**
+	 * Returns the iframe location. Can be null.
 	 * @return the iframe location.
 	 */
     public URI getIframeLocation();
@@ -64,5 +82,26 @@ public interface ApplicationConfigurationPlugin {
      * @return yes if the application matches, or should be applied to all applications, false if it doesn't.
      */
     public boolean matchesApplicationName(String appName);
+    
+    /**
+     * Sets the application assocations to the inputted values. This will overwrite all previous
+     * values.
+     * @param appName - the string name of an application.
+     */
+    public void setApplicationAssociations(List<String> applicationAssociations);
+    
+    /**
+     * Adds an application assocation list to the existing list. This does not overwrite the
+     * previous values, and if there is an existing value it wont add it.
+     * @param applicationAssociations
+     */
+    public void addApplicationAssocations(List<String> applicationAssociations);
+    
+    /**
+     * Adds a single application association to this plugin. If the application is already
+     * there, then nothing will happen.
+     * @param applicationAssocation - the string name of the application.
+     */
+    public void addApplicationAssociations(String applicationAssocation);
 
 }
