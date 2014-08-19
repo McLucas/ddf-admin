@@ -39,10 +39,10 @@ define([
             return resp.value;
         },
         comparator: function(model){
-            var secondary = 0;
+            var secondary = null;
             var displayName = model.get("displayName");
             if(displayName === 'Details'){
-                // no ops.
+                secondary = 0;
             } else if(displayName === 'Features'){
                 secondary = 1;
             } else if(displayName === 'Configurations'){

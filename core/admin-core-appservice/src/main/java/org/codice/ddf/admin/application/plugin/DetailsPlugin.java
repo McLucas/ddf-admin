@@ -26,7 +26,7 @@ public class DetailsPlugin extends AbstractApplicationConfigurationPlugin {
 	 */
 	public DetailsPlugin() {
 		this.displayName = "Details";
-		this.javascriptLocation = "/somelocation/";
+        this.javascriptLocation = "/applications/js/view/plugins/details/Plugin.view.js";
 		this.order = 0;
 	}
 
