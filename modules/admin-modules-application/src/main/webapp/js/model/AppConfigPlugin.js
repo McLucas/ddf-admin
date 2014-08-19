@@ -24,6 +24,7 @@ define([
     AppConfigPlugin.Model = Backbone.Model.extend({});
 
     AppConfigPlugin.Collection = Backbone.Collection.extend({
+        model: AppConfigPlugin.Model,
         url: 'jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getConfigurationPlugins(java.lang.String)/',
         fetchByAppName: function(appName, options){
             var collection = this;
@@ -34,7 +35,22 @@ define([
             return this.fetch(newOptions);
         },
         parse: function(resp){
+            console.log(resp.value);
             return resp.value;
+        },
+        comparator: function(model){
+            var secondary = 0;
+            var displayName = model.get("displayName");
+            if(displayName === 'Details'){
+                // no ops.
+            } else if(displayName === 'Features'){
+                secondary = 1;
+            } else if(displayName === 'Configurations'){
+                secondary = 2;
+            } else {
+                secondary = 4;
+            }
+            return [model.get("order"), secondary];
         }
     });
 
