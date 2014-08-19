@@ -37,42 +37,50 @@ public class AbstractApplicationConfigurationPlugin implements ApplicationConfig
 	private UUID id = UUID.randomUUID();
 	/** the application name. Protected so implementers can set this.*/
 	private List<String> applicationNames = new ArrayList<String>();
+	/** the order of this plugin. Protected so implements can set this.*/
+	protected Integer order = Integer.MAX_VALUE;
 	
 	/**
 	 * Constructor.
 	 */
 	public AbstractApplicationConfigurationPlugin() {
-		applicationNames.add(ApplicationConfigurationPlugin.ALL_APPLICATION_KEY);
+		this.applicationNames.add(ApplicationConfigurationPlugin.ALL_APPLICATION_KEY);
 	}
 
 	/** {@inheritDoc}.*/
 	@Override
 	public List<String> getAssociatedApplications() {
-		return applicationNames;
+		return this.applicationNames;
 	}
 
 	/** {@inheritDoc}.*/
 	@Override
 	public String getDisplayName() {
-		return displayName;
+		return this.displayName;
 	}
 	
 	/** {@inheritDoc}.*/
 	@Override
 	public URI getJavascriptLocation() {
-		if (javascriptLocation == null) {
+		if (this.javascriptLocation == null) {
 			return null;
 		}
-		return URI.create(javascriptLocation);
+		return URI.create(this.javascriptLocation);
 	}
 
 	/** {@inheritDoc}.*/
 	@Override
 	public URI getIframeLocation() {
-		if (iframeLocation == null) {
+		if (this.iframeLocation == null) {
 			return null;
 		}
-		return URI.create(iframeLocation);
+		return URI.create(this.iframeLocation);
+	}
+	
+	/** {@inheritDoc}.*/
+	@Override
+	public Integer getOrder() {
+		return this.order;
 	}
 	
 	/** {@inheritDoc}.*/
@@ -85,6 +93,7 @@ public class AbstractApplicationConfigurationPlugin implements ApplicationConfig
 		jsonMapping.put(ApplicationConfigurationPlugin.DISPLAY_NAME_KEY, this.displayName);
 		jsonMapping.put(ApplicationConfigurationPlugin.IFRAME_LOCATION_KEY, this.iframeLocation);
 		jsonMapping.put(ApplicationConfigurationPlugin.JAVASCRIPT_LOCATION_KEY, this.javascriptLocation);
+		jsonMapping.put(ApplicationConfigurationPlugin.ORDER_KEY, this.order);
 		
 		return jsonMapping;
 	}
@@ -92,7 +101,7 @@ public class AbstractApplicationConfigurationPlugin implements ApplicationConfig
 	/** {@inheritDoc}.*/
 	@Override
 	public boolean matchesApplicationName(String appName) {
-		return (applicationNames.contains(ApplicationConfigurationPlugin.ALL_APPLICATION_KEY) || applicationNames.contains(appName));
+		return (this.applicationNames.contains(ApplicationConfigurationPlugin.ALL_APPLICATION_KEY) || this.applicationNames.contains(appName));
 	}
 
 	/** {@inheritDoc}.*/

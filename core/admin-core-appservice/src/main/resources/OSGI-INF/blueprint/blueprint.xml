@@ -106,5 +106,9 @@
 	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
 		<bean class="org.codice.ddf.admin.application.plugin.FeaturesPlugin"></bean>
 	</service>
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.DetailsPlugin"></bean>
+	</service>
 
 </blueprint>

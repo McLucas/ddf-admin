@@ -28,5 +28,6 @@ public class FeaturesPlugin extends AbstractApplicationConfigurationPlugin {
 		this.displayName = "Features";
 		this.iframeLocation = "";
         this.javascriptLocation = "/applications/js/view/plugins/features/Plugin.view.js";
+		this.order = 1;
 	}
 }
