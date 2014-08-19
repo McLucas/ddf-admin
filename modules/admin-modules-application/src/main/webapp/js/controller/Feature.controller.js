@@ -16,8 +16,8 @@
 define([
         'marionette',
         'underscore',
-        '/applications/js/view/features/Features.view.js',
-        '/applications/js/model/features/Feature.js'
+        '/applications/js/view/features/features.view.js',
+        '/applications/js/model/features/feature.js'
     ], function(Marionette, _, FeaturesView, FeatureModel){
         "use strict";
 

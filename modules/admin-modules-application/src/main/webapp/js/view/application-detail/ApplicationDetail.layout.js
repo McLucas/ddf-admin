@@ -39,6 +39,9 @@ define([
         navToApplications: function(e){
             e.preventDefault();
             App.vent.trigger('navigateTo:applicationHome');
+        },
+        selectFirstTab: function(){
+            this.$('.tab-container a:first').tab('show');
         }
     });
 

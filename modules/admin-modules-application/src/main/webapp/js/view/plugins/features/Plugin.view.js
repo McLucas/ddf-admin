@@ -16,12 +16,24 @@
 define([
     'marionette',
     'icanhaz',
+    '/applications/js/controller/Feature.controller.js',
     'text!/applications/templates/plugins/features/pluginView.handlebars'
-], function (Marionette, ich, featurePluginView) {
+], function (Marionette, ich, FeatureController, featurePluginView) {
 
     ich.addTemplate('featurePluginView',featurePluginView);
-    var PluginView = Marionette.ItemView.extend({
-        template: 'featurePluginView'
+    var PluginView = Marionette.Layout.extend({
+        template: 'featurePluginView',
+        regions: {
+            featureRegion: '.feature-region'
+        },
+        initialize: function(){
+            this.controller = new FeatureController({
+                region : this.featureRegion
+            });
+        },
+        onRender: function(){
+            this.controller.show(this.model.getAppKey());
+        }
     });
 
     return PluginView;

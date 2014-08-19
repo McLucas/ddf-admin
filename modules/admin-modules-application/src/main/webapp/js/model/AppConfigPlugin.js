@@ -25,7 +25,7 @@ define([
 
     AppConfigPlugin.Collection = Backbone.Collection.extend({
         model: AppConfigPlugin.Model,
-        url: 'jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getConfigurationPlugins(java.lang.String)/',
+        url: '/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getConfigurationPlugins(java.lang.String)/',
         fetchByAppName: function(appName, options){
             var collection = this;
 
@@ -35,7 +35,6 @@ define([
             return this.fetch(newOptions);
         },
         parse: function(resp){
-            console.log(resp.value);
             return resp.value;
         },
         comparator: function(model){

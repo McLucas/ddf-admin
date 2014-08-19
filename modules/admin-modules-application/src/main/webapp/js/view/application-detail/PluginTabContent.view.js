@@ -32,6 +32,9 @@ define([
         regions: {
             tabContentInner: '.tab-content-inner'
         },
+        initialize: function(options){
+            this.applicationModel = options.applicationModel;
+        },
         onBeforeRender: function(){
             this.$el.attr('id', this.model.get('displayName'));
         },
@@ -41,7 +44,7 @@ define([
             var jsLocation = view.model.get('javascriptLocation');
             if(jsLocation){
                 require([jsLocation], function(TabView){
-                    var newView = new TabView({model: view.model});
+                    var newView = new TabView({model: view.applicationModel});
                     view.tabContentInner.show(newView);
                 });
             } else if(iframeLocation){
@@ -54,7 +57,12 @@ define([
 
     var PluginTabContentsView = Marionette.CollectionView.extend({
         className: 'tab-content',
-        itemView: ItemView
+        itemView: ItemView,
+        itemViewOptions: function(){
+            return {
+                applicationModel: this.model
+            };
+        }
     });
 
     return PluginTabContentsView;

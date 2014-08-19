@@ -35,8 +35,9 @@ define([
             App.applications.show(layoutView);
 
             this.fetchAppConfigPlugins(applicationModel.get('name')).then(function(appConfigPlugins){
-                layoutView.tabs.show(new PluginTabView({collection: appConfigPlugins}));
-                layoutView.tabContent.show(new PluginTabContentView({collection: appConfigPlugins}));
+                layoutView.tabs.show(new PluginTabView({collection: appConfigPlugins, model: applicationModel}));
+                layoutView.tabContent.show(new PluginTabContentView({collection: appConfigPlugins, model: applicationModel}));
+                layoutView.selectFirstTab();
             }).fail(function(error){
                 console.log(error.stack);
                 throw error;
