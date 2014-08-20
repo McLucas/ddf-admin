@@ -60,6 +60,7 @@
 }
 
 .edit-toggle {
+  width: 85px;
   .active-text {
     display: none;
   }
@@ -84,6 +85,10 @@
 
 .show-in-edit-mode{
   display: none;
+}
+
+.visible-in-edit-mode{
+  visiblity: hidden;
 }
 
 .edit-mode {
