@@ -21,7 +21,6 @@ define([
     'icanhaz',
     'underscore',
     'jquery',
-    'js/application',
     '/applications/js/view/app-grid/AppCardCollection.view.js',
     'text!applicationNew',
     'text!mvnItemTemplate',
@@ -30,7 +29,7 @@ define([
     '/applications/js/wreqr.js',
     'fileupload',
     'perfectscrollbar'
-], function(require, Backbone, Marionette, ich, _, $, Application, AppCardCollectionView, applicationNew, mvnItemTemplate, fileProgress,
+], function(require, Backbone, Marionette, ich, _, $, AppCardCollectionView, applicationNew, mvnItemTemplate, fileProgress,
             applicationOutlineButtons, wreqr) {
     "use strict";
 
