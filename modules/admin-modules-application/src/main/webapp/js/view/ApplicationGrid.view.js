@@ -247,7 +247,7 @@ define([
         },
         modelChanged: function(evt){
             this.$(evt.currentTarget).toggleClass('active', this.model.get('isEditMode'));
-            Application.App.vent.trigger('app-grid:edit-mode-toggled', this.model.get('isEditMode'));
+            wreqr.vent.trigger('app-grid:edit-mode-toggled', this.model.get('isEditMode'));
         },
         toggleDisplayOptions: function(){
             var value = this.$('input[name="display-options"]:checked').val();
@@ -308,7 +308,7 @@ define([
                 });
             }
 
-            this.listenTo(Application.App.vent, 'app-grid:edit-mode-toggled', this.toggleEditMode);
+            this.listenTo(wreqr.vent, 'app-grid:edit-mode-toggled', this.toggleEditMode);
         },
         onRender: function () {
             var view = this;

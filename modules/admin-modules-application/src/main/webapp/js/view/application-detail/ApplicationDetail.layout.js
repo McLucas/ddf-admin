@@ -17,14 +17,13 @@ define([
     'backbone',
     'marionette',
     'icanhaz',
-    'js/application',
+    '/applications/js/wreqr.js',
     'text!applicationDetailLayout'
-], function(Backbone, Marionette, ich, Application, applicationDetailLayout) {
+], function(Backbone, Marionette, ich, wreqr, applicationDetailLayout) {
     "use strict";
 
     ich.addTemplate('applicationDetailLayout', applicationDetailLayout);
 
-    var App = Application.App;
 
     var DetailedApplicationLayout = Marionette.Layout.extend({
         template: 'applicationDetailLayout',
@@ -38,7 +37,7 @@ define([
         },
         navToApplications: function(e){
             e.preventDefault();
-            App.vent.trigger('navigateTo:applicationHome');
+            wreqr.vent.trigger('navigateTo:applicationHome');
         },
         selectFirstTab: function(){
             this.$('.tab-container a:first').tab('show');
