@@ -49,7 +49,9 @@
             icanhaz: 'lib/icanhandlebarz/ICanHandlebarz',
 
             // require plugins
-            text: 'lib/requirejs-plugins/lib/text'
+            text: 'lib/requirejs-plugins/lib/text',
+            // datatables
+            datatables: 'lib/datatables/media/js/jquery.dataTables'
         },
 
 
@@ -73,7 +75,7 @@
                 exports: 'Handlebars'
             },
             icanhaz: {
-                deps: ['handlebars'],
+                deps: ['handlebars','jquery'],
                 exports: 'ich'
             },
 

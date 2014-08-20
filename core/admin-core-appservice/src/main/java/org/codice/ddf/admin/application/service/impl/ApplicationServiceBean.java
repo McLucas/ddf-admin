@@ -34,6 +34,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.Feature;
+import org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin;
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.features.Repository;
+import org.codice.ddf.admin.application.rest.model.FeatureDto;
 import org.codice.ddf.admin.application.service.Application;
 import org.codice.ddf.admin.application.service.ApplicationNode;
 import org.codice.ddf.admin.application.service.ApplicationService;
@@ -78,14 +82,21 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
     private static final String MAP_DEPENDENCIES = "dependencies";
 
     private static final String MAP_PARENTS = "parents";
+    
+    private static final String MAP_STATUS = "status";
+    
+    private static final String MAP_REPOSITORY = "repository";
 
     private Logger logger = LoggerFactory.getLogger(ApplicationServiceBeanMBean.class);
-    
+
     private final ConfigurationAdminExt configAdminExt;
     
     private static final String SERVICE_PID = "service.pid";
 
     private static final String SERVICE_FACTORYPID = "service.factoryPid";
+
+    /** has all the application configuration plugins.*/
+    private List<ApplicationConfigurationPlugin> pluginList;
 
     /**
      * Creates an instance of an ApplicationServiceBean
@@ -418,6 +429,62 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
             return ldapFilter.toString();
         }
         return "(" + SERVICE_PID + "=" + "*)";
+    }
+
+    @Override
+    public List<Map<String, Object>> getConfigurationPlugins(String appName) {
+        List<Map<String, Object>> returnValues = new ArrayList<Map<String, Object>>();
+
+        for (ApplicationConfigurationPlugin plugin : pluginList) {
+            if (plugin.matchesApplicationName(appName)) {
+                returnValues.add(plugin.toJSON());
+            }
+        }
+
+        return returnValues;
+    }
+
+    /**
+     * Getter method for the plugin list.
+     * @return the plugin list.
+     */
+    public List<ApplicationConfigurationPlugin> getPluginList() {
+        return pluginList;
+    }
+
+    /**
+     * Setter method for the plugin list.
+     * @param pluginList the plugin list.
+     */
+    public void setPluginList(List<ApplicationConfigurationPlugin> pluginList) {
+        this.pluginList = pluginList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllFeatures() {
+        return getFeatureMap(appService.getAllFeatures());
+    }
+
+    @Override
+    public List<Map<String, Object>> findApplicationFeatures(String applicationName) {
+        return getFeatureMap(appService.findApplicationFeatures(applicationName));
+    }
+
+    private List<Map<String, Object>> getFeatureMap(List<FeatureDto> featureViews) {
+        List<Map<String, Object>> features = new ArrayList<Map<String, Object>>();
+        try {
+            for (FeatureDto feature : featureViews) {
+                Map<String, Object> featureMap = new HashMap<String, Object>();
+                featureMap.put(MAP_NAME, feature.getName());
+                featureMap.put(MAP_VERSION, feature.getVersion());
+                featureMap.put(MAP_STATUS, feature.getStatus());
+                featureMap.put(MAP_REPOSITORY, feature.getRepository());
+                features.add(featureMap);
+            }
+        } catch (Exception ex) {
+            logger.warn("getFeatureMap Exception: " + ex.getMessage());
+        }
+        return features;
     }
 
 }

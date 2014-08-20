@@ -13,14 +13,15 @@
  *
  **/
 /*global define*/
-define(function (require) {
+define([
+    'icanhaz',
+    'underscore',
+    'handlebars'
+    ],function (ich, _, Handlebars) {
     "use strict";
 
 // The module to be exported
-    var ich = require('icanhaz'),
-        _ = require('underscore'),
-        Handlebars = require('handlebars'),
-        helper, helpers = {
+    var helper, helpers = {
             fileSize: function (item) {
                 var bytes = parseInt(item, 10);
                 if (isNaN(bytes)) {
@@ -151,6 +152,11 @@ define(function (require) {
                 if(str && typeof str === "string") {
                     return new Handlebars.SafeString(str);
                 }
+            },
+            join: function( array, sep, options ) {
+                return array.map(function( item ) {
+                    return options.fn( item );
+                }).join( sep );
             }
         };
 

@@ -77,6 +77,7 @@
           destroy-method="destroy">
         <argument ref="appService" />
         <argument ref="configurationAdminExt"></argument>
+        <property name="pluginList" ref="pluginList" />
     </bean>
     
     <bean id="configurationAdminExt" class="org.codice.ddf.ui.admin.api.ConfigurationAdminExt">
@@ -103,5 +104,19 @@
     <bean id="notActiveApplicationsCompleter" class="org.codice.ddf.admin.application.service.impl.NotActiveApplicationsCompleter">
       <argument ref="appService" />
     </bean>
+    
+	<reference-list id="pluginList" interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin" availability="optional" />
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.ConfigurationPlugin"></bean>
+	</service>
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.FeaturesPlugin"></bean>
+	</service>
+	
+	<service interface="org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin">
+		<bean class="org.codice.ddf.admin.application.plugin.DetailsPlugin"></bean>
+	</service>
 
 </blueprint>
