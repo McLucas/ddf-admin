@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                 ]
             },
             cssFiles : {
-                files :['src/main/webapp/scss/*.scss','src/main/webapp/scss/*/*.scss','src/main/webapp/scss/*/*/*.scss'],
+                files :['src/main/webapp/scss/*.scss','src/main/webapp/scss/**/*.scss'],
                 tasks : ['sass', 'cssmin']
             },
             bowerFile: {

@@ -86,7 +86,10 @@
               org.apache.karaf.shell.console,
               *
             </Import-Package>
-            <Export-Package>org.codice.ddf.admin.application.service;version=${admin.core.appservice.api.version}</Export-Package>
+            <Export-Package>
+            	org.codice.ddf.admin.application.service;version=${admin.core.appservice.api.version},
+            	org.codice.ddf.admin.application.plugin;version=${admin.core.appservice.api.version}
+            </Export-Package>
           </instructions>
         </configuration>
       </plugin>

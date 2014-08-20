@@ -16,20 +16,22 @@
     <div class="panel-body">
         <!-- card overlay buttons -->
         {{#is isDisabled false}}
-            <div class="card-overlay bottom visible-in-edit-mode">
+            <div class="card-overlay bottom visible-in-edit-mode action-button-group">
                 <div class="block">
                     <div class="centered">
                         {{#is state 'ACTIVE'}}
-                            <i href="#{{appId}}-stopModal" data-toggle="modal" class="fa fa-stop fa-4x" title="Click to stop this application"></i>
+                            <i href="#{{appId}}-stopModal" data-toggle="modal" class="fa fa-minus-circle fa-4x" title="Click to stop this application"></i>
+                            <div class="divider"></div>
+                            <i href="#{{appId}}-updateModal" data-toggle="modal" class="fa fa-upload fa-4x" title="Click to upgrade this application"></i>
                         {{/is}}
                         {{#is state 'INACTIVE'}}
-                            <i href="#{{appId}}-startModal" data-toggle="modal" class="fa fa-play fa-4x in" title="Click to start this application"></i>
+                            <i href="#{{appId}}-startModal" data-toggle="modal" class="fa fa-plus-circle fa-4x in" title="Click to start this application"></i>
                         {{/is}}
                     </div>
                 </div>
             </div>
         {{/is}}
-        <div class="card-overlay right hide-in-edit-mode">
+        <div class="card-overlay select-button-group hide-in-edit-mode">
             <div class="block">
                 <div class="centered">
                     <i class="fa fa-chevron-right fa-4x select-application"></i>
@@ -43,7 +45,7 @@
                 <span>{{displayName}}</span>
             </div>
             <div class="version">
-                <i class="fa fa-code-fork fa-2x vertical-align-middle"></i>
+                <i class="fa fa-code-fork fa-lg vertical-align-middle"></i>
                 <span class="vertical-align-middle">{{version}}</span>
             </div>
         </div>
@@ -55,17 +57,23 @@
                         <span>{{.}}</span>
                     {{/join}}
                 {{else}}
-                    <span>{{description}}</span>
+                    {{#if description}}
+                        <span>{{description}}</span>
+                    {{else}}
+                        <span>No Description for this Application.</span>
+                    {{/if}}
+
+
                 {{/if}}
             </div>
         </div>
-        <div class="badges">
-            {{#if dependencies}}
-                <div data-toggle="tooltip" data-placement="top" title="This application has {{dependencies.length}} sub applciations.">
-                    <span class="badge badge-info">{{dependencies.length}}</span> <i class="fa fa-sitemap"></i>
-                </div>
-            {{/if}}
-        </div>
+        <!--<div class="badges">-->
+            <!--{{#if dependencies}}-->
+                <!--<div data-toggle="tooltip" data-placement="top" title="This application has {{dependencies.length}} sub applciations.">-->
+                    <!--<span class="badge badge-info">{{dependencies.length}}</span> <i class="fa fa-cubes"></i>-->
+                <!--</div>-->
+            <!--{{/if}}-->
+        <!--</div>-->
     </div>
 
     <!-- Modals -->

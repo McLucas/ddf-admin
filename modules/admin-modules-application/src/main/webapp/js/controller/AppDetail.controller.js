@@ -16,8 +16,12 @@
 define([
     'marionette',
     'js/application',
-    '/applications/js/view/application-detail/ApplicationDetail.layout.js'
-    ],function (Marionette, Application, ApplicationDetailLayout) {
+    '/applications/js/view/application-detail/ApplicationDetail.layout.js',
+    '/applications/js/model/AppConfigPlugin.js',
+    '/applications/js/view/application-detail/PluginTabContent.view.js',
+    '/applications/js/view/application-detail/PluginTab.view.js',
+    'q'
+    ],function (Marionette, Application, ApplicationDetailLayout, AppConfigPlugin,PluginTabContentView,PluginTabView,  Q) {
 
     var App = Application.App;
 
@@ -27,7 +31,30 @@ define([
             this.listenTo(App.vent,'application:selected' , this.showDetailsPage);
         },
         showDetailsPage: function(applicationModel) {
-            App.applications.show(new ApplicationDetailLayout({model: applicationModel}));
+            var layoutView = new ApplicationDetailLayout({model: applicationModel});
+            App.applications.show(layoutView);
+
+            this.fetchAppConfigPlugins(applicationModel.get('name')).then(function(appConfigPlugins){
+                layoutView.tabs.show(new PluginTabView({collection: appConfigPlugins, model: applicationModel}));
+                layoutView.tabContent.show(new PluginTabContentView({collection: appConfigPlugins, model: applicationModel}));
+                layoutView.selectFirstTab();
+            }).fail(function(error){
+                console.log(error.stack);
+                throw error;
+            });
+        },
+        fetchAppConfigPlugins: function(appName){
+            var collection = new AppConfigPlugin.Collection();
+            var defer = Q.defer();
+            collection.fetchByAppName(appName, {
+                success: function(){
+                    defer.resolve(collection);
+                },
+                failure: function(){
+                    defer.reject(new Error("Error fetching app config plugins for {0}".format(appName)));
+                }
+            });
+            return defer.promise;
         }
     });
 

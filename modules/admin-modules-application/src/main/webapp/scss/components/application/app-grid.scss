@@ -4,7 +4,7 @@
 }
 
 .apps-grids{
-  height: 700px;
+  height: 600px;
   overflow: auto;
 
   hr {
@@ -22,18 +22,23 @@
 .apps-grid {
   overflow: auto;
   .grid-cell {
-    width: (100% / 5.0);
+    width: (100% / 4.0);
     margin: 0;
     padding: 1%;
     vertical-align: top;
     float: left;
   }
 
+
+
   &[list-type="list"] {
+    margin-top: 10px;
     .grid-cell {
+      padding: 0px;
       float: none;
       width: 100%;
-      padding: 0px;
+      margin: 0px auto;
+      max-width: 1000px; // the max length at which is look ok
     }
   }
 }
