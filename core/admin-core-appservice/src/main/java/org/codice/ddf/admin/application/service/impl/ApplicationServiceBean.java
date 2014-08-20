@@ -350,6 +350,25 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 		List<Map<String, Object>> services = configAdminExt.listServices(getDefaultFactoryLdapFilter(), getDefaultLdapFilter());
 		List<Map<String, Object>> returnValues = new ArrayList<Map<String, Object>>();
 		
+		boolean value = true;
+		if (value) {
+			List<Map<String, Object>> returnVals = new ArrayList<Map<String, Object>>();
+			for (int i = 0; i < 5; i++) {
+				Map<String, Object> container = new HashMap<String, Object>();
+				//<td>{{name}}</td>
+				container.put("name", "name"+ i);
+				//<td>{{version}}</td>
+				container.put("version", "version" + i);
+				//<td>{{repository}}</td>
+				container.put("repository", "repository" + i);
+				//<td>{{status}}</td>
+				container.put("status", "status" + i);
+				returnVals.add(container);
+			}
+			
+			return returnVals;
+		}
+		
 		if (!services.isEmpty()) {
 			Application app = appService.getApplication(applicationID);
 
