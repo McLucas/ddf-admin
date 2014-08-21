@@ -14,27 +14,26 @@
  **/
 /*global define*/
 define([
+        'jquery',
         'marionette',
         'underscore',
-        'jquery',
-        'text!configurationViewTemplate',
-        '/applications/js/view/configuration/Configuration.itemview.js',
+        'text!configurationEditViewTemplate',
+        '/applications/js/view/configuration/edit/Configuration.edit.itemview.js',
         'icanhaz'
-    ],
-    function(Marionette, _, $, ConfigurationViewTemplate, ConfigurationItemView, ich){
-        'use strict';
+    ], function($,Marionette, _, ConfigurationEditViewTemplate, ConfigurationEditItemView, ich){
+        "use strict";
 
-        if(!ich.configurationViewTemplate) {
-            ich.addTemplate('configurationViewTemplate', ConfigurationViewTemplate);
+        if(!ich.configurationEditViewTemplate) {
+            ich.addTemplate('configurationEditViewTemplate', ConfigurationEditViewTemplate);
         }
 
-        var ConfigurationView = Marionette.CompositeView.extend({
-            template: 'configurationViewTemplate',
-            itemView: ConfigurationItemView,
+        var configurationView = Marionette.CollectionView.extend({
+            template: 'configurationEditViewTemplate',
+            itemView: ConfigurationEditItemView,
             itemViewContainer: 'tbody'
         });
 
+        return configurationView;
 
-        return ConfigurationView;
     }
 );

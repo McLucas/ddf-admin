@@ -32,8 +32,16 @@ define(['backbone'], function (Backbone) {
 
     Configuration.Collection = Backbone.Collection.extend({
         model: Configuration.Model,
+        initialize: function(options){
+            this.type = options.type;
+            this.appName = options.appName;
+        },
         url: function() {
-            return configurationURL;
+            if(this.type !== 'all'){
+                return configurationURL + this.appName;
+            }else{
+                return configurationURL;
+            }
         },
         parse: function(resp){
             return resp.value;

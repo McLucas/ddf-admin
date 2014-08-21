@@ -11,19 +11,19 @@
  *
  **/
  --}}
-<td style="width:50%">
-    <a href='#{{uuid}}' class='editLink' data-toggle="modal">
-        {{properties.[service.pid]}}
-    </a>
-    <div class="config-modal-container">
-        <div id="{{uuid}}" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-
+ <div class='{{id}} metatype control-group'>
+    <label class='control-label' for='{{id}}'>{{name}}</label>
+            <div class="btn-group">
+                <button type="button" style="width:25px;height:25px" class="small btn-secondary plus-button">+</button>
         </div>
-    </div>
-</td>
-<td style="width:50%">
-    {{bundle_name}}
-</td>
-<td>
-    <a href='#' class='removeLink glyphicon glyphicon-remove'></a>
-</td>
+        {{#if description}}
+            <a href='#' class='description' data-title='{{id}}'>
+                <i class='glyphicon glyphicon-question-sign'></i>
+            </a>
+        {{/if}}
+        
+        <div id='{{id}}'>
+        
+        </div>
+        
+</div>
