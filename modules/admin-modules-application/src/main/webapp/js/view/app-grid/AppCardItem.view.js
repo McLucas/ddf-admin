@@ -119,7 +119,6 @@ define([
         startPrompt: function() {
             this.startMessage();
             this.model.toggleChosenApp();
-            this.model.flagRemove();
         },
         selectApplication: function(){
             wreqr.vent.trigger('application:selected',this.model);

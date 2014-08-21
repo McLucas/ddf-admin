@@ -4,3 +4,15 @@
   -ms-border-radius: $radius;
   border-radius: $radius;
 }
+
+@mixin btn-success {
+  color: #ffffff;
+  background-color: #18bc9c;
+  border-color: #18bc9c;
+}
+
+@mixin btn-danger {
+  color: #ffffff;
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
