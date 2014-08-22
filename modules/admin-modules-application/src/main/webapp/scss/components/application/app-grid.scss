@@ -68,7 +68,7 @@
 
   &.active {
 
-    @include btn-danger();
+    @include btn-success();
 
     .active-text {
       display: inherit;
