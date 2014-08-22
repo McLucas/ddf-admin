@@ -60,7 +60,7 @@ define([
 
         onRender: function(){
             if(this.AppShowState === ACTIVE_STATE && this.$('.new-or-update-app').length === 0){
-                this.$el.prepend(addApplicationCard);
+                this.$el.prepend(ich.addApplicationCard());
             }
         },
 
