@@ -764,12 +764,22 @@ public class ApplicationServiceImpl implements ApplicationService {
         List<FeatureDto> features = new ArrayList<FeatureDto>();
         try {
             for (Feature feature : getRepositoryFeatures(applicationName)) {
-                features.add(getFeatureView(feature));
+                if (!isAppInFeatureList(feature, applicationName)) {
+                    features.add(getFeatureView(feature));
+                }
             }
         } catch (Exception ex) {
             logger.warn("getRepositoryFeatures Exception: " + ex.getMessage());
         }
         return features;
+    }
+
+    private boolean isAppInFeatureList(Feature feature, String applicationName) {
+        String appKey = feature.getName() + "-" + feature.getVersion();
+        if (appKey.equalsIgnoreCase(applicationName)) {
+            return true;
+        }
+        return false;
     }
 
     private List<Feature> getRepositoryFeatures(String repositoryName) {
