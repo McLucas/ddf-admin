@@ -21,7 +21,6 @@ define([
     'icanhaz',
     'underscore',
     'jquery',
-    'js/application',
     '/applications/js/view/app-grid/AppCardCollection.view.js',
     'text!applicationNew',
     'text!mvnItemTemplate',
@@ -30,7 +29,7 @@ define([
     '/applications/js/wreqr.js',
     'fileupload',
     'perfectscrollbar'
-], function(require, Backbone, Marionette, ich, _, $, Application, AppCardCollectionView, applicationNew, mvnItemTemplate, fileProgress,
+], function(require, Backbone, Marionette, ich, _, $, AppCardCollectionView, applicationNew, mvnItemTemplate, fileProgress,
             applicationOutlineButtons, wreqr) {
     "use strict";
 
@@ -247,7 +246,7 @@ define([
         },
         modelChanged: function(evt){
             this.$(evt.currentTarget).toggleClass('active', this.model.get('isEditMode'));
-            Application.App.vent.trigger('app-grid:edit-mode-toggled', this.model.get('isEditMode'));
+            wreqr.vent.trigger('app-grid:edit-mode-toggled', this.model.get('isEditMode'));
         },
         toggleDisplayOptions: function(){
             var value = this.$('input[name="display-options"]:checked').val();
@@ -308,7 +307,7 @@ define([
                 });
             }
 
-            this.listenTo(Application.App.vent, 'app-grid:edit-mode-toggled', this.toggleEditMode);
+            this.listenTo(wreqr.vent, 'app-grid:edit-mode-toggled', this.toggleEditMode);
         },
         onRender: function () {
             var view = this;
@@ -325,7 +324,7 @@ define([
         // Default view of the applications
         refreshView: function() {
             wreqr.vent.trigger('toggle:state', ACTIVE_STATE);
-            this.appsgrid.currentView.render();
+            //this.appsgrid.currentView.render();
 
             this.toggleState(ACTIVE_STATE);
             this.toggleView(this.gridLayout);
@@ -368,14 +367,14 @@ define([
         },
         startAppView: function() {
             wreqr.vent.trigger('toggle:state', INACTIVE_STATE);
-            this.appsgrid.currentView.render();
+            //this.appsgrid.currentView.render();
 
             this.toggleState(INACTIVE_STATE);
             this.toggleView(this.gridLayout);
         },
         stopAppView: function() {
             wreqr.vent.trigger('toggle:state', STOP_STATE);
-            this.appsgrid.currentView.render();
+            //this.appsgrid.currentView.render();
 
             this.toggleState(STOP_STATE);
             this.toggleView(this.gridLayout);
@@ -410,8 +409,8 @@ define([
                 that.model.update('read', that.response, message).then(function() {
                     that.model.validateUpdate(jsonModel, numNodes, message, "start");
                     that.setErrorStates();
-                    that.appsgrid.currentView.AppShowState = ACTIVE_STATE;
-                    that.appsgrid.currentView.render();
+                    //that.appsgrid.currentView.AppShowState = ACTIVE_STATE;
+                    //that.appsgrid.currentView.render();
                     that.toggleView(that.gridLayout);
                 });
             });

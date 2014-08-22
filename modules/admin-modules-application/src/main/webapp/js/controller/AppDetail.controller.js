@@ -15,24 +15,23 @@
 /*global define*/
 define([
     'marionette',
-    'js/application',
+    '/applications/js/wreqr.js',
     '/applications/js/view/application-detail/ApplicationDetail.layout.js',
     '/applications/js/model/AppConfigPlugin.js',
     '/applications/js/view/application-detail/PluginTabContent.view.js',
     '/applications/js/view/application-detail/PluginTab.view.js',
     'q'
-    ],function (Marionette, Application, ApplicationDetailLayout, AppConfigPlugin,PluginTabContentView,PluginTabView,  Q) {
-
-    var App = Application.App;
+    ],function (Marionette, wreqr, ApplicationDetailLayout, AppConfigPlugin,PluginTabContentView,PluginTabView,  Q) {
 
     var AppDetailController = Marionette.Controller.extend({
 
-        initialize: function(){
-            this.listenTo(App.vent,'application:selected' , this.showDetailsPage);
+        initialize: function(options){
+            this.regions = options.regions;
+            this.listenTo(wreqr.vent,'application:selected' , this.showDetailsPage);
         },
         showDetailsPage: function(applicationModel) {
             var layoutView = new ApplicationDetailLayout({model: applicationModel});
-            App.applications.show(layoutView);
+            this.regions.applications.show(layoutView);
 
             this.fetchAppConfigPlugins(applicationModel.get('name')).then(function(appConfigPlugins){
                 layoutView.tabs.show(new PluginTabView({collection: appConfigPlugins, model: applicationModel}));

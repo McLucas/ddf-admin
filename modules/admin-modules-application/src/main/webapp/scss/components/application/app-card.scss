@@ -1,13 +1,30 @@
+/**
+ * Copyright (c) Codice Foundation
+ *
+ * This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details. A copy of the GNU Lesser General Public License
+ * is distributed along with this program and can be found at
+ * <http://www.gnu.org/licenses/lgpl.html>.
+ *
+ **/
 $version-color: #808080;
 $overlay-icon-color: lightgray;
-$overlay-icon-color-highlight: $bs-btn-primary-backbround-color;
-$overlay-icon-color-hover: green;
+$overlay-icon-color-highlight: white;
+$overlay-icon-color-hover: #3498db;
 
 $card-background-color: #ffffff;
 $card-background-color-hover: $bs-btn-well-default-background-color;
 
-$card-border-color: $bs-btn-primary-backbround-color;
-$card-border-color-list: $bs-btn-well-default-background-color;
+$card-border-color: lightgray;
+$card-border-color-hover: $bs-btn-primary-backbround-color;
+
+$card-overlay-background-color: tranparent;
+$card-overlay-background-color-hover: lightgray;
 
 .app-card {
   padding: 6px;
@@ -16,6 +33,7 @@ $card-border-color-list: $bs-btn-well-default-background-color;
   @include border-radius(6px);
   height: 250px;
   position: relative;
+  margin-bottom: 0px;
 
   .panel-body {
     padding: 0px $app-card-overlay-width 0px 0px; // reset bootstrap
@@ -53,7 +71,8 @@ $card-border-color-list: $bs-btn-well-default-background-color;
     width: $app-card-overlay-width;
 
     position: absolute;
-    //background-color:white;
+    background-color:$card-overlay-background-color;
+
     opacity: 1;
     vertical-align: middle;
     z-index: 1;
@@ -67,17 +86,21 @@ $card-border-color-list: $bs-btn-well-default-background-color;
       margin: 30px 0px;
       display: block;
     }
+
+    i.select-application {
+      margin-left: 10px;
+    }
   }
 
   &:hover {
     background-color: $card-background-color-hover;
     transition: background-color 400ms ease, opacity 400ms ease;
-
+    border-color: $card-border-color-hover;
     .card-overlay {
       visibility: visible;
       opacity: 1;
-      //background-color: $bs-btn-primary-backbround-color;
-      //background-color: transparent;
+      background-color: $card-overlay-background-color-hover;
+
       transition: background-color 400ms ease, opacity 400ms ease;
       i {
         color: $overlay-icon-color-highlight;
@@ -106,15 +129,22 @@ $card-border-color-list: $bs-btn-well-default-background-color;
   visibility: visible;
   opacity: 1;
 
-  &:hover {
-    visibility: visible;
-    opacity: 1;
-    //background-color: $bs-btn-primary-backbround-color;
-    //background-color: transparent;
-    i {
-      color: $overlay-icon-color-highlight;
-    }
+  visibility: visible;
+  opacity: 1;
+  background-color: $card-overlay-background-color-hover;
+
+  i {
+    color: $overlay-icon-color-highlight;
   }
+
+//  &:hover {
+//
+//
+//    //background-color: transparent;
+//    i {
+//      color: $overlay-icon-color-highlight;
+//    }
+//  }
 }
 
 /////
@@ -123,7 +153,6 @@ $card-border-color-list: $bs-btn-well-default-background-color;
 .apps-grid[list-type="list"] {
 
   .app-card {
-    border-color: $card-border-color-list;
     height: 100px;
     border-top-width: 0px;
     border-radius: 0px;
@@ -134,6 +163,10 @@ $card-border-color-list: $bs-btn-well-default-background-color;
 
     &.panel {
       margin-bottom: 0px;
+    }
+
+    &:hover {
+      border-top-width: 1px;
     }
   }
 

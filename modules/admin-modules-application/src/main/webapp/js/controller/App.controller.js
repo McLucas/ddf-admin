@@ -15,22 +15,20 @@
 /*global define*/
 define([
     'marionette',
-    'js/application',
+    '/applications/js/wreqr.js',
     '/applications/js/view/ApplicationGrid.view.js',
     '/applications/js/model/ApplicationsLayout.js'
-    ],function (Marionette,Application,ApplicationGrid,ApplicationsLayout) {
-
-    var App = Application.App;
+    ],function (Marionette,wreqr,ApplicationGrid,ApplicationsLayout) {
 
     var AppController = Marionette.Controller.extend({
 
         initialize: function(options){
-            this.region = options.region;
-            this.listenTo(App.vent,'navigateTo:applicationHome' , this.show);
+            this.regions = options.regions;
+            this.listenTo(wreqr.vent,'navigateTo:applicationHome' , this.show);
         },
 
         show: function(){
-            App.applications.show(new ApplicationGrid({
+            this.regions.applications.show(new ApplicationGrid({
                 modelClass: ApplicationsLayout,
                 enableApplicationRemoval: true
             }));

@@ -6,7 +6,15 @@
         <dd>{{displayName}}</dd>
         <br/>
         <dt>Description</dt>
-        <dd>{{description}}</dd>
+        <dd>
+            {{#if paragraphs}}
+                {{#join paragraphs "<br/><br/>"}}
+                    <span>{{.}}</span>
+                {{/join}}
+            {{else}}
+                <span>{{description}}</span>
+            {{/if}}
+            </dd>
     </dl>
 
 </div>

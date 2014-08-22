@@ -40,8 +40,16 @@ define([
 
 
                 ApplicationModule.controllers = {};
-                ApplicationModule.controllers.appController = new AppController();
-                ApplicationModule.controllers.appDetailController = new AppDetailController();
+                ApplicationModule.controllers.appController = new AppController({
+                    regions: {
+                        applications: App.applications
+                    }
+                });
+                ApplicationModule.controllers.appDetailController = new AppDetailController({
+                    regions: {
+                        applications: App.applications
+                    }
+                });
 
                 // display main app home.
                 ApplicationModule.controllers.appController.show();

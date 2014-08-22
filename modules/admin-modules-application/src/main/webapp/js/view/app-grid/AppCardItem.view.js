@@ -17,9 +17,9 @@ define([
     'marionette',
     'icanhaz',
     'underscore',
-    'js/application',
+    '/applications/js/wreqr.js',
     'text!applicationInfo'
-    ],function (Marionette, ich, _, Application, applicationInfo) {
+    ],function (Marionette, ich, _, wreqr, applicationInfo) {
     "use strict";
 
     if(!ich.applicationInfo) {
@@ -119,10 +119,9 @@ define([
         startPrompt: function() {
             this.startMessage();
             this.model.toggleChosenApp();
-            this.model.flagRemove();
         },
         selectApplication: function(){
-            Application.App.vent.trigger('application:selected',this.model);
+            wreqr.vent.trigger('application:selected',this.model);
         }
     });
 
