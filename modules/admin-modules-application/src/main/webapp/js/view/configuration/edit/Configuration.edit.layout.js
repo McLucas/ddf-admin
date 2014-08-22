@@ -26,6 +26,8 @@ define([
     ], function(Backbone, $ , Marionette, _, ConfigurationEditLayoutTemplate, ConfigurationEditLayoutHeaderTemplate, ich, ConfigurationEditItemView, ConfigurationEditView){
         "use strict";
 
+        var ConfigurationLayout = {};
+
         //These "constants" will help clarify some magic numbers defined from the
         //  Metatype specification
         var STRING = 1;
@@ -48,7 +50,7 @@ define([
             ich.addTemplate('configurationEditLayoutHeaderTemplate', ConfigurationEditLayoutHeaderTemplate);
         }
 
-        var configurationLayout = Marionette.Layout.extend({
+        ConfigurationLayout.View = Marionette.Layout.extend({
             template: 'configurationEditLayoutTemplate',
             tagName: 'div',
             className: 'modal-dialog',
@@ -75,8 +77,8 @@ define([
             },
 
             onRender: function() {
-                //this.renderDynamicFields();
-                //this.setupPopOvers();
+                this.renderDynamicFields();
+                this.setupPopOvers();
                 this.bind();
                 this.listenTo(this.model.get('service').get('response'), 'sync', this.bind);
             },
@@ -93,8 +95,7 @@ define([
              */
             renderDynamicFields: function() {
                 var view = this;
-                //view.$(".data-section").append(ich.checkboxEnableType(view.managedServiceFactory.toJSON()));
-                view.model.get('metatype').forEach(function(each) {
+                view.model.get('service').get('metatype').forEach(function(each) {
                     var type = each.get("type");
                     if(!_.isUndefined(type)) {
                         if (type === STRING || type === CHARACTER || type === BYTE || (type >= DOUBLE && type <= BIGDECIMAL)) {
@@ -154,9 +155,9 @@ define([
                     metatype = service.get('metatype');
                     if(metatype) {
                         metatype.forEach(function(each) {
-                            this.type = each.get("type");
-                            if(!_.isUndefined(this.type)) {
-                                if (this.type === 1 || this.type === 5 || this.type === 6 || (this.type >= 7 && this.type <= 10)) {
+                            var type = each.get("type");
+                            if(!_.isUndefined(type)) {
+                                if (type === 1 || type === 5 || type === 6 || (type >= 7 && type <= 10)) {
                                     if(each.get('cardinality') !== 0) {
                                         view[each.get("id")].close();
                                     }
@@ -171,7 +172,7 @@ define([
              */
             setupPopOvers: function() {
                 var view = this;
-                view.model.get('metatype').forEach(function(each) {
+                view.model.get('service').get('metatype').forEach(function(each) {
                     if(!_.isUndefined(each.get("description"))) {
                         var options,
                             selector = ".description[data-title='" + each.id + "']";
@@ -277,6 +278,6 @@ define([
             }
         });
 
-        return configurationLayout;
+        return ConfigurationLayout;
     }
 );

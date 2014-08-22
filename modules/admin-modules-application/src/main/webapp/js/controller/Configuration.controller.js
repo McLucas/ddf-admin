@@ -17,8 +17,9 @@ define([
         'marionette',
         'underscore',
         '/applications/js/view/configuration/Configuration.view.js',
-        '/applications/js/model/configuration/Configuration.js'
-    ], function(Marionette, _, ConfigurationView, ConfigurationModel){
+        '/applications/js/model/configuration/Configuration.js',
+        '/applications/js/view/configuration/service/Service.layout.js'
+    ], function(Marionette, _, ConfigurationView, ConfigurationModel, ServiceView){
         "use strict";
 
         var FeatureController = Marionette.Controller.extend({
@@ -27,89 +28,19 @@ define([
                 this.region = options.region;
             },
 
-            getFeatures: function(appName){
-                var self = this;
-                self.appName = appName;
-                var features = new ConfigurationModel.Collection({
-                    type: 'app',
-                    appName: appName
-                });
-                features.fetch({
-                    success: function(collection) {
-                        var featureView = new ConfigurationView({
-                            collection: collection
-                        });
-                        self.region.show(featureView);
-                        self.listenTo(featureView,"itemview:selected", self.onFeatureAction);
-                    }
-                });
-            },
-
             show: function(appName){
                 var self = this;
                 self.appName = appName;
-                var features = new ConfigurationModel.Collection({
-                    type: 'app',
+                var features = new ConfigurationModel.Response({
                     appName: appName
                 });
                 features.fetch({
-                    success: function(collection) {
-                        var featureView = new ConfigurationView({
-                            collection: collection
-                        });
-                        self.region.show(featureView);
-                        //self.layout.featuresDetails.show(featureView);
-                        self.listenTo(featureView,"itemview:selected", self.onFeatureAction);
+                    success: function() {
+                        var servicePage = new ServiceView({model: features});
+                        self.region.show(servicePage);
                     }
                 });
-            },
-
-            showAll: function(){
-                var view = this;
-                var features = new ConfigurationModel.Collection({
-                    type: 'all'
-                });
-                features.fetch({
-                    success: function(collection) {
-                        var featureView = new ConfigurationView({
-                            collection: collection
-                        });
-                        view.region.show(featureView);
-                    }
-                });
-            },
-
-            onFeatureAction: function (view, model){
-                var self = this;
-                var status = model.get("status");
-                var featureModel = new ConfigurationModel.Model({
-                    name: model.get("name")
-                });
-                //TODO: add loading div...
-                if(status === "Uninstalled") {
-                    var install = featureModel.install();
-                    if(install){
-                        install.success(function() {
-                            self.show(self.appName);
-                            console.log("installed feature: " + featureModel.name +" app: " + self.appName);
-                        }).fail(function() {
-                            console.log("install failed for feature: " + featureModel.name +" app: " + self.appName);
-                        });
-                    }
-                }else{
-                    var uninstall = featureModel.uninstall();
-                    if(uninstall){
-                        uninstall.success(function() {
-                            self.show(self.appName);
-                            console.log("uninstalled feature: " + featureModel.name +" app: " + self.appName);
-                        }).fail(function() {
-                            console.log("uninstall failed for feature: " + featureModel.name +" app: " + self.appName);
-                        });
-                    }
-                }
             }
-
-
         });
 
         return FeatureController;
