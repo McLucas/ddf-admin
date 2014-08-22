@@ -56,14 +56,14 @@ define([
             onCompositeCollectionRendered: function () {
                 this.$('#features-table').dataTable({
                     columnDefs : [{render : function(data,type,row){
-                        var src = "/applications/images/bundle_start.png";
+                        var icon = "fa-play";
                         var title = "Install";
                         if(row[3] === 'Installed'){
-                           src = "/applications/images/bundle_delete.png";
-                           title = "Uninstall";
+                            icon = "fa-stop";
+                            title = "Uninstall";
                         }
-                        var image = '<img id="action" src="' + src + '" title="' + title + '"' +" />";
-                        return image;
+                        var iconDisplay = '<i id="action" class="fa ' + icon + ' pointer" title="' + title + '"' +" />";
+                        return iconDisplay;
                     },"targets" : 4}],
                     bLengthChange: false,
                     bSortClasses: false,
