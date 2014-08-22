@@ -384,7 +384,7 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
                 features.add(featureMap);
             }
         } catch (Exception ex) {
-            logger.warn("getFeatureMap Exception: " + ex.getMessage());
+            logger.warn("getFeatureMap Exception: " + ex);
         }
         return features;
     }
