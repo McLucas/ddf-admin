@@ -1,13 +1,16 @@
 $version-color: #808080;
 $overlay-icon-color: lightgray;
-$overlay-icon-color-highlight: $bs-btn-primary-backbround-color;
-$overlay-icon-color-hover: green;
+$overlay-icon-color-highlight: white;
+$overlay-icon-color-hover: #3498db;
 
 $card-background-color: #ffffff;
 $card-background-color-hover: $bs-btn-well-default-background-color;
 
 $card-border-color: lightgray;
 $card-border-color-hover: $bs-btn-primary-backbround-color;
+
+$card-overlay-background-color: tranparent;
+$card-overlay-background-color-hover: lightgray;
 
 .app-card {
   padding: 6px;
@@ -55,7 +58,8 @@ $card-border-color-hover: $bs-btn-primary-backbround-color;
     width: $app-card-overlay-width;
 
     position: absolute;
-    //background-color:white;
+    background-color:$card-overlay-background-color;
+
     opacity: 1;
     vertical-align: middle;
     z-index: 1;
@@ -70,8 +74,8 @@ $card-border-color-hover: $bs-btn-primary-backbround-color;
       display: block;
     }
 
-    .select-application {
-      margin-left: 25px;
+    i.select-application {
+      margin-left: 10px;
     }
   }
 
@@ -82,8 +86,8 @@ $card-border-color-hover: $bs-btn-primary-backbround-color;
     .card-overlay {
       visibility: visible;
       opacity: 1;
-      //background-color: $bs-btn-primary-backbround-color;
-      //background-color: transparent;
+      background-color: $card-overlay-background-color-hover;
+
       transition: background-color 400ms ease, opacity 400ms ease;
       i {
         color: $overlay-icon-color-highlight;
@@ -112,15 +116,22 @@ $card-border-color-hover: $bs-btn-primary-backbround-color;
   visibility: visible;
   opacity: 1;
 
-  &:hover {
-    visibility: visible;
-    opacity: 1;
-    //background-color: $bs-btn-primary-backbround-color;
-    //background-color: transparent;
-    i {
-      color: $overlay-icon-color-highlight;
-    }
+  visibility: visible;
+  opacity: 1;
+  background-color: $card-overlay-background-color-hover;
+
+  i {
+    color: $overlay-icon-color-highlight;
   }
+
+//  &:hover {
+//
+//
+//    //background-color: transparent;
+//    i {
+//      color: $overlay-icon-color-highlight;
+//    }
+//  }
 }
 
 /////
