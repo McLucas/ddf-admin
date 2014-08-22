@@ -18,8 +18,9 @@ define([
         'marionette',
         'underscore',
         'text!featureRowTemplate',
-        'icanhaz'
-], function($,Marionette, _, FeatureRowTemplate, ich){
+        'icanhaz',
+        'spin'
+], function($,Marionette, _, FeatureRowTemplate, ich, Spinner){
         "use strict";
 
         if(!ich.featureRowTemplate) {
@@ -43,6 +44,7 @@ define([
                 var target = $(event.target).attr("id");
                 if(target !== undefined && target.indexOf('action') !== -1) {
                     this.trigger('selected', this.model);
+                    new Spinner().spin(event.currentTarget.lastChild);
                 }
             },
 
