@@ -176,7 +176,7 @@ module.exports = function (grunt) {
             });
     });
 
-    var buildTasks = ['clean', 'bower-offline-install', 'sed:imports', 'cssmin', 'jshint'];
+    var buildTasks = ['clean', 'bower-offline-install', 'sed:imports', 'sass', 'cssmin', 'jshint'];
 
     try {
         grunt.log.writeln('Checking for python');

@@ -16,12 +16,25 @@
 define([
     'marionette',
     'icanhaz',
+    '/applications/js/controller/Configuration.controller.js',
     'text!/applications/templates/plugins/config/pluginView.handlebars'
-    ], function (Marionette, ich, configPluginViewTemplate) {
+    ], function (Marionette, ich, ConfigurationController, configPluginViewTemplate) {
 
     ich.addTemplate('configPluginViewTemplate',configPluginViewTemplate);
-    var PluginView = Marionette.ItemView.extend({
-        template: 'configPluginViewTemplate'
+    var PluginView = Marionette.Layout.extend({
+        template: 'configPluginViewTemplate',
+
+        regions: {
+            configurationRegion: '.region'
+        },
+        initialize: function(){
+            this.controller = new ConfigurationController({
+                region : this.configurationRegion
+            });
+        },
+        onRender: function(){
+            this.controller.show(this.model.get('appId'));
+        }
     });
 
     return PluginView;

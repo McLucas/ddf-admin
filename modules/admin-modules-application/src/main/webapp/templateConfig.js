@@ -37,7 +37,13 @@
             pluginTabCollectionView:'/applications/templates/application-detail/PluginTab.collection.view.handlebars',
             pluginTabContentItemView:'/applications/templates/application-detail/PluginTabContent.item.view.handlebars',
             pluginTabContentCollectionView:'/applications/templates/application-detail/PluginTabContent.collection.view.handlebars',
-            iframeView:'/applications/templates/iframeView.handlebars'
+            iframeView:'/applications/templates/iframeView.handlebars',
+            configurationViewTemplate: '/applications/templates/configuration/configuration.view.handlebars',
+            configurationItemViewTemplate: '/applications/templates/configuration/configuration.itemview.handlebars',
+            configurationEditViewTemplate : '/applications/templates/configuration/edit/configuration.edit.view.handlebars',
+            configurationEditItemViewTemplate: '/applications/templates/configuration/edit/configuration.edit.itemview.handlebars',
+            configurationEditLayoutTemplate: '/applications/templates/configuration/edit/configuration.edit.layout.handlebars',
+            configurationEditLayoutHeaderTemplate: '/applications/templates/configuration/edit/configuration.edit.layout.headers.handlebars'
         }
     });
 }());
