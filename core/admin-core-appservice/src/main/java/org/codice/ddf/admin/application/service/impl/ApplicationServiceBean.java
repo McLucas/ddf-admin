@@ -378,7 +378,7 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 					}
 
 				} catch (ApplicationServiceException e) {
-					logger.error("There was an error while trying to access the application", e);
+					logger.warn("There was an error while trying to access the application", e);
 					return new ArrayList<Map<String, Object>>();
 				}
 			}
