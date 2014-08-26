@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
@@ -36,8 +34,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.Feature;
 import org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin;
-import org.apache.karaf.features.FeaturesService;
-import org.apache.karaf.features.Repository;
 import org.codice.ddf.admin.application.rest.model.FeatureDto;
 import org.codice.ddf.admin.application.service.Application;
 import org.codice.ddf.admin.application.service.ApplicationNode;
