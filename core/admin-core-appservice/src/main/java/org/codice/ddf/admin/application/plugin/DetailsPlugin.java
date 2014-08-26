@@ -16,7 +16,6 @@ package org.codice.ddf.admin.application.plugin;
 
 /**
  * Defines a plugin for details.
- * @author Jeren
  *
  */
 public class DetailsPlugin extends AbstractApplicationConfigurationPlugin {

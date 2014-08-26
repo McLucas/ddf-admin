@@ -23,7 +23,6 @@ import java.util.UUID;
 
 /**
  * Handles the basic work for an ApplicationConfigurationPlugin. 
- * @author Jeren
  *
  */
 public class AbstractApplicationConfigurationPlugin implements ApplicationConfigurationPlugin {

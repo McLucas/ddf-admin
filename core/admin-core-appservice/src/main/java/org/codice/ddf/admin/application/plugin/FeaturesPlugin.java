@@ -16,7 +16,6 @@ package org.codice.ddf.admin.application.plugin;
 
 /**
  * Features implementation of the ApplicationConfigurationPlugin.
- * @author Jeren
  *
  */
 public class FeaturesPlugin extends AbstractApplicationConfigurationPlugin {

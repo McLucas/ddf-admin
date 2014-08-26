@@ -21,7 +21,6 @@ import java.util.UUID;
 
 /**
  * Defines an application configuration plugin. 
- * @author Jeren
  *
  */
 public interface ApplicationConfigurationPlugin {
