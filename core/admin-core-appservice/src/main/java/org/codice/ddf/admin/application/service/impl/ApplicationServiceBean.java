@@ -40,6 +40,7 @@ import org.codice.ddf.admin.application.service.ApplicationNode;
 import org.codice.ddf.admin.application.service.ApplicationService;
 import org.codice.ddf.admin.application.service.ApplicationServiceException;
 import org.codice.ddf.ui.admin.api.ConfigurationAdminExt;
+import org.osgi.framework.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,8 +89,10 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 
     private final ConfigurationAdminExt configAdminExt;
     
-    private static final String SERVICE_PID = "service.pid";
+    /** the service pid string.*/
+    private static final String SERVICE_PID = Constants.SERVICE_PID;
 
+    /** the service factor pid.*/
     private static final String SERVICE_FACTORYPID = "service.factoryPid";
 
     /** has all the application configuration plugins.*/
