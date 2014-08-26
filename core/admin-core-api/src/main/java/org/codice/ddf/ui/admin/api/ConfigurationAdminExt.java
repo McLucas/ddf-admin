@@ -546,11 +546,6 @@ public class ConfigurationAdminExt {
         ServiceReference[] refs = this.getBundleContext().getAllServiceReferences(serviceClass,
                 serviceFilter);
         
-        //FIXME: remove me
-        //this can be compared to the application.getBundles() <-- this is a list.
-        //refs[0].getBundle().getLocation();
-        //FIXME: done
-        
         for (int i = 0; refs != null && i < refs.length; i++) {
             Object pidObject = refs[i].getProperty(Constants.SERVICE_PID);
             // only include valid PIDs
