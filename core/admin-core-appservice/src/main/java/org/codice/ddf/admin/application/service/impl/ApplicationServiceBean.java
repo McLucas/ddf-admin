@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
@@ -36,14 +34,17 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.Feature;
 import org.codice.ddf.admin.application.plugin.ApplicationConfigurationPlugin;
-import org.apache.karaf.features.FeaturesService;
-import org.apache.karaf.features.Repository;
 import org.codice.ddf.admin.application.rest.model.FeatureDto;
 import org.codice.ddf.admin.application.service.Application;
 import org.codice.ddf.admin.application.service.ApplicationNode;
 import org.codice.ddf.admin.application.service.ApplicationService;
 import org.codice.ddf.admin.application.service.ApplicationServiceException;
 import org.codice.ddf.ui.admin.api.ConfigurationAdminExt;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.metatype.MetaTypeInformation;
+import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,6 +99,15 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 
     /** has all the application configuration plugins.*/
     private List<ApplicationConfigurationPlugin> pluginList;
+    
+    /** the name of the metatype service to be looked up.*/
+    private static final String META_TYPE_NAME = "org.osgi.service.metatype.MetaTypeService";
+    
+    /** the service tracker.*/
+    private ServiceTracker<Object, Object> serviceTracker;
+    
+    /** bundle context for this bean.*/
+    private BundleContext bundleContext;
 
     /**
      * Creates an instance of an ApplicationServiceBean
@@ -108,9 +118,10 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
      *             If an error occurs when trying to construct the MBean
      *             objects.
      */
-    public ApplicationServiceBean(ApplicationService appService, ConfigurationAdminExt configAdminExt) throws ApplicationServiceException {
+    public ApplicationServiceBean(ApplicationService appService, ConfigurationAdminExt configAdminExt, BundleContext bundleContext) throws ApplicationServiceException {
         this.appService = appService;
         this.configAdminExt = configAdminExt;
+        this.bundleContext = bundleContext;
         try {
             objectName = new ObjectName(ApplicationService.class.getName()
                     + ":service=application-service");
@@ -351,53 +362,43 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 		List<Map<String, Object>> services = configAdminExt.listServices(getDefaultFactoryLdapFilter(), getDefaultLdapFilter());
 		List<Map<String, Object>> returnValues = new ArrayList<Map<String, Object>>();
 		
-/**		boolean value = false;
-		if (value) {
-			List<Map<String, Object>> returnVals = new ArrayList<Map<String, Object>>();
-			for (int i = 0; i < 5; i++) {
-				Map<String, Object> container = new HashMap<String, Object>();
-				//<td>{{name}}</td>
-				container.put("uuid", UUID.randomUUID().toString());
-				//<td>{{version}}</td>
-				container.put("bundle_name", "bundle_name" + i);
-				//<td>{{repository}}</td>
-				container.put("repository", "repository" + i);
-				//<td>{{status}}</td>
-				container.put("status", "status" + i);
-				
-				Map<String, Object> innerContainer = new HashMap<String, Object>();
-				innerContainer.put("service.pid", "test pid");
-				
-				container.put("properties", innerContainer);
-				returnVals.add(container);
-			}
-			
-			return returnVals;
-		}*/
-		
 		if (!services.isEmpty()) {
 			Application app = appService.getApplication(applicationID);
+			MetaTypeService metatypeService = getMetaTypeService();
 
 			if (app != null) {
 				try {
 					Set<BundleInfo> bundles = app.getBundles();
 
 					Set<String> bundleLocations = new HashSet<String>();
+	                Set<MetaTypeInformation> metatypeInformation = new HashSet<MetaTypeInformation>();
 					for (BundleInfo info : bundles) {
 						bundleLocations.add(info.getLocation());
 					}
-
+					
+					for (Bundle bundle : this.bundleContext.getBundles()) {
+					    for (BundleInfo info : bundles) {
+					        if (info.getLocation().equals(bundle.getLocation())) {
+			                       metatypeInformation.add(metatypeService.getMetaTypeInformation(bundle));
+					        }
+					    }
+					}
+					
 					for (Map<String, Object> service : services) {
 						if (service.containsKey("configurations")) {
 							List<Map<String, Object>> configurations = (List<Map<String, Object>>) service.get("configurations");
 							for (Map<String, Object> item : configurations) {
-								if (item.containsKey("bundle_location")) {
+							    if (item.containsKey("bundle_location")) {
 									String bundleLocation = (String) item.get("bundle_location");
 									if (bundleLocations.contains(bundleLocation)) {
 										returnValues.add(service);
 									}
 								}
 							}
+						} else {
+                            if (checkForMetaTypesForService(metatypeInformation, service)) {
+                                returnValues.add(service);
+                            }
 						}
 					}
 
@@ -409,6 +410,35 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 		}
 
 		return returnValues;
+	}
+	
+	/**
+	 * Checks to see if there are any metatypes out there for a particular service.
+	 * @param metatypeInformations - Where we'll look for metatypes that match our service from.
+	 * @param service - our service we want metatypes for.
+	 * @return true if there is, and the service should be added, or false if it shouldn't be.
+	 */
+	private boolean checkForMetaTypesForService(Set<MetaTypeInformation> metatypeInformations, Map<String, Object> service) {
+        String id = (String) service.get("id");
+        boolean ifFactory = (Boolean) service.get("factory");
+        if (ifFactory) {
+            for (MetaTypeInformation information : metatypeInformations) {
+                for (String pid : information.getFactoryPids()) {
+                    if (pid.equals(id)) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            for (MetaTypeInformation information : metatypeInformations) {
+                for (String pid : information.getPids()) {
+                    if (pid.equals(id)) {
+                        return true;
+                    }
+                }
+            }
+        }
+	    return false;
 	}
 	
     private String getDefaultFactoryLdapFilter() {
@@ -510,6 +540,22 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
             logger.warn("getFeatureMap Exception: " + ex);
         }
         return features;
+    }
+    
+    /**
+     * Gets the service with the specified class name. Will create a new {@link ServiceTracker} if
+     * the service is not already retrieved.
+     * 
+     * @param serviceName
+     *            the service name to obtain
+     * @return the service or <code>null</code> if missing.
+     */
+    final MetaTypeService getMetaTypeService() {
+        if (serviceTracker == null) {
+            serviceTracker = new ServiceTracker<Object, Object>(this.bundleContext, META_TYPE_NAME, null);
+            serviceTracker.open();
+        }
+        return (MetaTypeService) serviceTracker.getService();
     }
 
 }
