@@ -15,7 +15,7 @@
 #applications {
   .page-layout {
     .header {
-      padding: 0px 10px 10px 10px;
+      padding: 10px 0px;
     }
   }
 }
@@ -33,6 +33,11 @@
 
 #features-table {
   .fa-stack{
-    .fa-stack(@gray, #FFFFFF, @gray, @overlay-icon-color-hover);
+    .fa-stack(@bs-btn-primary-backbround-color, #FFFFFF, @bs-btn-success-background-color, #FFFFFF);
   }
 }
+
+.fa-stack.disabled {
+  .disable();
+}
+

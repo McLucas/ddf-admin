@@ -160,6 +160,12 @@ define([
                 isEditMode: false,
                 displayMode: 'card'
             });
+            this.listenTo(wreqr.vent, 'application:reqestSelection', this.requestSelection);
+        },
+        requestSelection: function(applicationModel){
+            if(!this.model.get('isEditMode')){
+                wreqr.vent.trigger('application:selected', applicationModel);
+            }
         },
         onRender: function() {
             var view = this;
@@ -261,6 +267,7 @@ define([
     var ACTIVE_STATE = "ACTIVE";
     var INACTIVE_STATE = "INACTIVE";
     var STOP_STATE = "STOP";
+    var FAILED_STATE = "FAILED";
 
     // Main layout view for all the applications
     var ApplicationView = Marionette.Layout.extend({
@@ -314,7 +321,7 @@ define([
 
             _.defer(function() {
                 view.appsgridInstalled.show(new AppCardCollectionView({collection: view.model, AppShowState: ACTIVE_STATE}));
-                view.appsgridNotInstalled.show(new AppCardCollectionView({collection: view.model, AppShowState: INACTIVE_STATE}));
+                view.appsgridNotInstalled.show(new AppCardCollectionView({collection: view.model, AppShowState: [INACTIVE_STATE,FAILED_STATE]}));
                 view.applicationGridButtons.show(new NewApplicationView({response: view.response}));
                 view.$('#application-grid-layout').perfectScrollbar();
             });

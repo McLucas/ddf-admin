@@ -58,7 +58,7 @@ define([
                     columnDefs : [{render : function(data,type,row){
                         var icon = "fa-play fa-stack-1x fa-inverse start-button";
                         var title = "Install";
-                        if(row[3] === 'Installed'){
+                        if(row[2] === 'Installed'){
                             icon = "fa-stop fa-stack-1x fa-inverse stop-button";
                             title = "Uninstall";
                         }
@@ -66,7 +66,7 @@ define([
                             '<i id="action" class="fa ' + icon + ' pointer" title="' + title + '"' +" />" +
                             "</span>";
                         return iconDisplay;
-                    },"targets" : 4}],
+                    },"targets" : 3}],
                     bLengthChange: false,
                     bSortClasses: false,
                     sDom: 't<"table-footer"ip>',
