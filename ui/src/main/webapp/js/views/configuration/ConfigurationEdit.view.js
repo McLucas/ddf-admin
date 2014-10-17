@@ -143,9 +143,6 @@ define([
 
     ConfigurationEditView.ConfigurationCollection = Marionette.CollectionView.extend({
         itemView: ConfigurationEditView.ConfigurationItem,
-        initialize: function() {
-            this.listenTo(wreqr.vent, 'poller:start', this.render);
-        },
         buildItemView: function(item, ItemViewType, itemViewOptions){
             var view;
             var configuration = this.options.configuration;
@@ -224,8 +221,10 @@ define([
                             case 'ViewToModel':
                                 return bindValue.toString();
                             case 'ModelToView':
-                                if(bindValue){
-                                    return JSON.parse(bindValue.toLowerCase());
+
+                                if(bindValue  !== undefined && bindValue  !== null){
+                                    var bindValueString = "" + bindValue;
+                                    return JSON.parse(bindValueString.toLowerCase());
                                 }
                                 return null;  // TODO determine if this is correct
 
@@ -242,13 +241,18 @@ define([
             wreqr.vent.trigger('beforesave');
             if(this.service) {
                 this.service.get('configurations').add(this.model);
+                if (!this.model.get('properties').has('service.pid')) {
+                    this.model.get('properties').set('service.pid', this.service.get('id'));
+                }
             }
             this.model.save();
+            wreqr.vent.trigger('sync');
             wreqr.vent.trigger('poller:start');
 
             var view = this;
             _.defer(function() {
                 view.close();
+                wreqr.vent.trigger('refreshConfigurations');
             });
         },
         /**

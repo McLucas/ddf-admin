@@ -14,19 +14,6 @@
  **/
 package org.codice.ddf.admin.application.service.impl;
 
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.karaf.bundle.core.BundleState;
 import org.apache.karaf.bundle.core.BundleStateService;
 import org.apache.karaf.features.BundleInfo;
@@ -48,6 +35,19 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Implementation of the ApplicationService. Uses the karaf features service and
@@ -258,6 +258,38 @@ public class ApplicationServiceImpl implements ApplicationService {
             appMap.put(curApp, new ApplicationNodeImpl(curApp, getApplicationStatus(curApp)));
         }
 
+        // The boolean is used because this function is used twice in a row.
+        //   The proper output should be that of the second call rather than the first.
+        traverseDependencies(appMap, filteredApplications, false);
+        traverseDependencies(appMap, filteredApplications, true);
+
+        // determine the root applications (contain no parent) and return those
+        for (Entry<Application, ApplicationNodeImpl> curAppNode : appMap.entrySet()) {
+            if (curAppNode.getValue().getParent() == null) {
+                logger.debug("Adding {} as a root application.", curAppNode.getKey().getName());
+                applicationTree.add(curAppNode.getValue());
+            }
+        }
+
+        return applicationTree;
+    }
+
+    /**
+     * Finds a parent and children dependencies for each app.  Needs to be run twice
+     * in order to get full dependency correlations.
+     *
+     * @param appMap
+     *            Application Map containing all the application nodes.
+     * @param filteredApplications
+     *            Set containing all the application nodes minus those in the ignored list
+     * @param reportDebug
+     *            Boolean that allows debug statements to be output or not.  Only reason
+     *            why this exists is because this function will be called twice and only
+     *            the second set of statements will be relevant
+     */
+    private void traverseDependencies(Map<Application, ApplicationNodeImpl> appMap,
+                                      Set<Application> filteredApplications,
+                                      boolean reportDebug) {
         // find dependencies in each app and add them into correct node
         for (Entry<Application, ApplicationNodeImpl> curAppNode : appMap.entrySet()) {
             try {
@@ -265,8 +297,10 @@ public class ApplicationServiceImpl implements ApplicationService {
                 Feature mainFeature = curAppNode.getKey().getMainFeature();
 
                 if (null == mainFeature) {
-                    logger.debug("Application \"{}\" does not contain a main feature", curAppNode
-                            .getKey().getName());
+                    if (reportDebug) {
+                        logger.debug("Application \"{}\" does not contain a main feature", curAppNode
+                                .getKey().getName());
+                    }
                     continue;
                 }
 
@@ -282,13 +316,17 @@ public class ApplicationServiceImpl implements ApplicationService {
                             featuresService.getFeature(curDepFeature.getName()), filteredApplications);
                     if (dependencyApp != null) {
                         if (dependencyApp.equals(curAppNode.getKey())) {
-                            logger.debug("Self-dependency");
+                            if (reportDebug) {
+                                logger.debug("Self-dependency");
+                            }
                             continue;
                         } else {
-                            logger.debug(
-                                    "Application {} depends on the feature {} which is located in application {}.",
-                                    curAppNode.getKey().getName(), curDepFeature.getName(),
-                                    dependencyApp.getName());
+                            if (reportDebug) {
+                                logger.debug(
+                                        "Application {} depends on the feature {} which is located in application {}.",
+                                        curAppNode.getKey().getName(), curDepFeature.getName(),
+                                        dependencyApp.getName());
+                            }
                             depAppSet.add(dependencyApp);
                         }
                     }
@@ -298,9 +336,11 @@ public class ApplicationServiceImpl implements ApplicationService {
                     if (depAppSet.size() > 1) {
                         parentApp = findCommonParent(depAppSet, appMap);
                         if (parentApp == null) {
-                            logger.warn(
-                                    "Found more than 1 application dependency for application {}. Could not determine which one is the correct parent. Application will be sent back as root application.",
-                                    curAppNode.getKey().getName());
+                            if (reportDebug) {
+                                logger.warn(
+                                        "Found more than 1 application dependency for application {}. Could not determine which one is the correct parent. Application will be sent back as root application.",
+                                        curAppNode.getKey().getName());
+                            }
                             continue;
                         }
                     } else {
@@ -311,29 +351,23 @@ public class ApplicationServiceImpl implements ApplicationService {
                     parentAppNode.getChildren().add(curAppNode.getValue());
                     curAppNode.getValue().setParent(parentAppNode);
                 } else {
-                    logger.debug(
-                            "No dependency applications found for {}. This will be sent back as a root application.",
-                            curAppNode.getKey().getName());
+                    if (reportDebug) {
+                        logger.debug(
+                                "No dependency applications found for {}. This will be sent back as a root application.",
+                                curAppNode.getKey().getName());
+                    }
                 }
 
                 // ApplicationServiceException from DDF and Exception from Karaf
                 // (FeaturesService)
             } catch (Exception e) {
-                logger.warn(
-                        "Encountered error while determining dependencies for \"{}\". This may cause an incomplete application hierarchy to be created.",
-                        curAppNode.getKey().getName(), e);
+                if (reportDebug) {
+                    logger.warn(
+                            "Encountered error while determining dependencies for \"{}\". This may cause an incomplete application hierarchy to be created.",
+                            curAppNode.getKey().getName(), e);
+                }
             }
         }
-
-        // determine the root applications (contain no parent) and return those
-        for (Entry<Application, ApplicationNodeImpl> curAppNode : appMap.entrySet()) {
-            if (curAppNode.getValue().getParent() == null) {
-                logger.debug("Adding {} as a root application.", curAppNode.getKey().getName());
-                applicationTree.add(curAppNode.getValue());
-            }
-        }
-
-        return applicationTree;
     }
 
     /**
@@ -725,12 +759,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public void removeApplication(Application application) throws ApplicationServiceException {
-        removeApplication(application.getURI());
+        if (application != null) {
+            removeApplication(application.getURI());
+        }
     }
 
     @Override
     public void removeApplication(String applicationName) throws ApplicationServiceException {
-        removeApplication(getApplication(applicationName));
+        if (applicationName != null) {
+            removeApplication(getApplication(applicationName));
+        }
     }
 
     @Override
