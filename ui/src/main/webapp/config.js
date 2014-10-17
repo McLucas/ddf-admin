@@ -55,7 +55,10 @@
             app: 'js/application',
 
             //moment
-            moment: 'lib/moment/moment'
+            moment: 'lib/moment/moment',
+
+            //backbone assocations
+            backboneassociations: 'lib/backbone-associations/backbone-associations-min'
         },
 
 
@@ -89,7 +92,9 @@
 
             jqueryui: ['jquery'],
             bootstrap: ['jqueryui'],
-            moment: {exports: 'moment'}
+            moment: {exports: 'moment'},
+
+            backboneassociations: ['backbone']
 
         },
 

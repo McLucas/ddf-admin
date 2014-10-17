@@ -390,6 +390,7 @@ public class ApplicationServiceBean implements ApplicationServiceBeanMBean {
 									String bundleLocation = (String) item.get("bundle_location");
 									if (bundleLocations.contains(bundleLocation)) {
 										returnValues.add(service);
+										break;
 									}
 								}
 							}
